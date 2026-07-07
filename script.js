@@ -1,34 +1,25 @@
-/* ===== Navbar Scroll Effect ===== */
+/**
+ * 同济人工智能（苏州）研究院 — 交互脚本
+ */
+
+/* ===== Navbar Scroll ===== */
 const navbar = document.getElementById('navbar');
 const hamburger = document.getElementById('hamburger');
 const navMenu = document.getElementById('navMenu');
 const navLinks = document.querySelectorAll('.nav-link');
 
-// Scroll effect
-let lastScroll = 0;
 window.addEventListener('scroll', () => {
-    const currentScroll = window.scrollY;
-
-    if (currentScroll > 50) {
-        navbar.classList.add('scrolled');
-    } else {
-        navbar.classList.remove('scrolled');
-    }
-
-    lastScroll = currentScroll;
-
-    // Update active nav link based on scroll position
+    navbar.classList.toggle('scrolled', window.scrollY > 50);
     updateActiveNavLink();
 });
 
-// Mobile menu toggle
+/* ===== Mobile Menu ===== */
 hamburger.addEventListener('click', () => {
     hamburger.classList.toggle('active');
     navMenu.classList.toggle('active');
     document.body.style.overflow = navMenu.classList.contains('active') ? 'hidden' : '';
 });
 
-// Close mobile menu on link click
 navLinks.forEach(link => {
     link.addEventListener('click', () => {
         hamburger.classList.remove('active');
@@ -37,20 +28,20 @@ navLinks.forEach(link => {
     });
 });
 
-// Update active nav link
+/* ===== Active Nav Link ===== */
 function updateActiveNavLink() {
     const sections = document.querySelectorAll('section[id], header[id]');
-    const scrollPos = window.scrollY + 100;
+    const scrollPos = window.scrollY + 120;
 
     sections.forEach(section => {
-        const sectionTop = section.offsetTop;
-        const sectionHeight = section.offsetHeight;
-        const sectionId = section.getAttribute('id');
+        const top = section.offsetTop;
+        const height = section.offsetHeight;
+        const id = section.getAttribute('id');
 
-        if (scrollPos >= sectionTop && scrollPos < sectionTop + sectionHeight) {
+        if (scrollPos >= top && scrollPos < top + height) {
             navLinks.forEach(link => {
                 link.classList.remove('active');
-                if (link.getAttribute('href') === '#' + sectionId) {
+                if (link.getAttribute('href') === '#' + id) {
                     link.classList.add('active');
                 }
             });
@@ -59,11 +50,7 @@ function updateActiveNavLink() {
 }
 
 /* ===== Scroll Animations ===== */
-const observerOptions = {
-    threshold: 0.1,
-    rootMargin: '0px 0px -50px 0px'
-};
-
+const observerOptions = { threshold: 0.1, rootMargin: '0px 0px -40px 0px' };
 const observer = new IntersectionObserver((entries) => {
     entries.forEach(entry => {
         if (entry.isIntersecting) {
@@ -73,125 +60,94 @@ const observer = new IntersectionObserver((entries) => {
     });
 }, observerOptions);
 
-// Observe elements for animation
 document.addEventListener('DOMContentLoaded', () => {
-    const animElements = document.querySelectorAll(
-        '.about-card, .product-card, .case-card, .adv-item, .contact-info-card, .section-header'
+    const anims = document.querySelectorAll(
+        '.about-intro, .hl-item, .im-card, .tf-card, .eco-field, .ci-card, .tp-stage'
     );
-    animElements.forEach(el => {
+    anims.forEach(el => {
         el.classList.add('fade-in');
         observer.observe(el);
     });
 
-    // Start counter animations
     initCounters();
 });
 
 /* ===== Counter Animation ===== */
 function initCounters() {
     const counters = document.querySelectorAll('[data-counter]');
-    const counterObserver = new IntersectionObserver((entries) => {
+    const counterObs = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
             if (entry.isIntersecting) {
-                const counter = entry.target;
-                const target = parseInt(counter.getAttribute('data-counter'));
+                const el = entry.target;
+                const target = parseInt(el.getAttribute('data-counter'));
                 const duration = 2000;
-                const startTime = performance.now();
+                const start = performance.now();
 
-                function update(currentTime) {
-                    const elapsed = currentTime - startTime;
-                    const progress = Math.min(elapsed / duration, 1);
-                    // Ease out cubic
-                    const eased = 1 - Math.pow(1 - progress, 3);
-                    const current = Math.floor(eased * target);
-                    counter.textContent = current.toLocaleString();
-
-                    if (progress < 1) {
-                        requestAnimationFrame(update);
-                    } else {
-                        counter.textContent = target.toLocaleString();
-                    }
+                function tick(now) {
+                    const p = Math.min((now - start) / duration, 1);
+                    const eased = 1 - Math.pow(1 - p, 3);
+                    el.textContent = Math.floor(eased * target).toLocaleString();
+                    if (p < 1) requestAnimationFrame(tick);
+                    else el.textContent = target.toLocaleString();
                 }
 
-                requestAnimationFrame(update);
-                counterObserver.unobserve(counter);
+                requestAnimationFrame(tick);
+                counterObs.unobserve(el);
             }
         });
     }, { threshold: 0.5 });
 
-    counters.forEach(counter => counterObserver.observe(counter));
+    counters.forEach(c => counterObs.observe(c));
 }
 
 /* ===== Contact Form ===== */
 const contactForm = document.getElementById('contactForm');
-
 contactForm.addEventListener('submit', (e) => {
     e.preventDefault();
 
-    // Get form data
-    const formData = {
-        name: document.getElementById('name').value.trim(),
-        company: document.getElementById('company').value.trim(),
-        phone: document.getElementById('phone').value.trim(),
-        email: document.getElementById('email').value.trim(),
-        interest: document.getElementById('interest').value,
-        message: document.getElementById('message').value.trim()
+    const data = {
+        name: document.getElementById('cname').value.trim(),
+        company: document.getElementById('ccompany').value.trim(),
+        phone: document.getElementById('cphone').value.trim(),
+        email: document.getElementById('cemail').value.trim(),
+        direction: document.getElementById('cdirection').value,
+        message: document.getElementById('cmessage').value.trim()
     };
 
-    // Basic validation
-    if (!formData.name) {
-        showToast('请填写您的姓名', 'error');
-        return;
-    }
-    if (!formData.phone) {
-        showToast('请填写联系电话', 'error');
-        return;
-    }
+    if (!data.name) { showToast('请填写联系人姓名'); return; }
+    if (!data.phone) { showToast('请填写联系电话'); return; }
 
-    // Show success (in production, send to backend API)
-    console.log('Form submitted:', formData);
-    showToast('提交成功！我们将在24小时内与您联系。', 'success');
+    console.log('Form submitted:', data);
+    showToast('提交成功！我们将在2个工作日内与您联系。', 'success');
     contactForm.reset();
 });
 
-/* ===== Toast Notification ===== */
-function showToast(message, type = 'success') {
-    // Remove existing toast
+/* ===== Toast ===== */
+function showToast(message, type) {
     const existing = document.querySelector('.toast');
     if (existing) existing.remove();
 
     const toast = document.createElement('div');
-    toast.className = `toast ${type}`;
+    toast.className = `toast ${type || ''}`;
     toast.textContent = message;
     document.body.appendChild(toast);
+    requestAnimationFrame(() => toast.classList.add('show'));
 
-    // Trigger animation
-    requestAnimationFrame(() => {
-        toast.classList.add('show');
-    });
-
-    // Auto remove
     setTimeout(() => {
         toast.classList.remove('show');
         setTimeout(() => toast.remove(), 400);
     }, 3500);
 }
 
-/* ===== Smooth scroll for all anchor links ===== */
+/* ===== Smooth scroll ===== */
 document.querySelectorAll('a[href^="#"]').forEach(anchor => {
     anchor.addEventListener('click', function(e) {
-        const targetId = this.getAttribute('href');
-        if (targetId === '#') return;
-
-        const target = document.querySelector(targetId);
+        const id = this.getAttribute('href');
+        if (id === '#') return;
+        const target = document.querySelector(id);
         if (target) {
             e.preventDefault();
-            const offset = 80;
-            const targetPos = target.offsetTop - offset;
-            window.scrollTo({
-                top: targetPos,
-                behavior: 'smooth'
-            });
+            window.scrollTo({ top: target.offsetTop - 80, behavior: 'smooth' });
         }
     });
 });

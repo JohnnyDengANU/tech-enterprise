@@ -3,36 +3,42 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="您的公司名称 — 专业的科技解决方案提供商，为企业数字化转型赋能。">
-    <meta name="keywords" content="科技公司,企业网站,数字化解决方案,SaaS平台,云服务">
-    <meta property="og:title" content="您的公司名称 — 科技解决方案提供商">
-    <meta property="og:description" content="专注于为企业提供领先的数字化解决方案与服务。">
+    <meta name="description" content="同济人工智能（苏州）研究院 — 由同济大学与相城区政府共建，聚焦机器人与人工智能领域的科技孵化与成果转化平台。">
+    <meta name="keywords" content="同济人工智能,苏州研究院,科技孵化,成果转化,机器人,人工智能,产学研,同济大学">
+    <meta property="og:title" content="同济人工智能（苏州）研究院">
+    <meta property="og:description" content="依托同济大学机器人与人工智能实验室，构建机器人与人工智能企业生态圈。">
     <meta property="og:type" content="website">
-    <title>您的公司名称 — 领先的科技解决方案提供商</title>
+    <title>同济人工智能（苏州）研究院 — 机器人与人工智能科技孵化平台</title>
     <link rel="stylesheet" href="styles.css">
-    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%233b82f6'/><text x='50' y='68' font-size='50' text-anchor='middle' fill='white' font-family='Arial'>T</text></svg>">
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='24' fill='%231B3A5C'/><text x='50' y='55' font-size='22' font-weight='bold' text-anchor='middle' fill='%23C4973B' font-family='serif'>同济</text><text x='50' y='78' font-size='14' text-anchor='middle' fill='%23C4973B' font-family='sans-serif'>AI</text></svg>">
 </head>
 <body>
     <!-- 导航栏 -->
     <nav class="navbar" id="navbar">
         <div class="container nav-container">
             <a href="#" class="nav-logo">
-                <span class="logo-icon">T</span>
-                <span class="logo-text">您的公司</span>
+                <div class="logo-mark">
+                    <span class="logo-cn">同济</span>
+                    <span class="logo-en">TJ·AI</span>
+                </div>
+                <div class="logo-text-wrap">
+                    <span class="logo-title">人工智能（苏州）研究院</span>
+                    <span class="logo-subtitle">Tongji AI Institute (Suzhou)</span>
+                </div>
             </a>
             <ul class="nav-menu" id="navMenu">
                 <li><a href="#home" class="nav-link active">首页</a></li>
                 <li><a href="#about" class="nav-link">关于我们</a></li>
-                <li><a href="#products" class="nav-link">产品服务</a></li>
-                <li><a href="#advantages" class="nav-link">核心优势</a></li>
-                <li><a href="#cases" class="nav-link">客户案例</a></li>
+                <li><a href="#incubation" class="nav-link">科技孵化</a></li>
+                <li><a href="#transfer" class="nav-link">成果转化</a></li>
+                <li><a href="#ecosystem" class="nav-link">孵化生态</a></li>
                 <li><a href="#contact" class="nav-link">联系我们</a></li>
                 <li class="nav-cta-mobile">
-                    <a href="#contact" class="btn btn-primary">免费咨询</a>
+                    <a href="#contact" class="btn btn-primary">入驻申请</a>
                 </li>
             </ul>
             <div class="nav-actions">
-                <a href="#contact" class="btn btn-primary btn-small">免费咨询</a>
+                <a href="#contact" class="btn btn-primary">入驻申请</a>
                 <button class="hamburger" id="hamburger" aria-label="菜单">
                     <span></span><span></span><span></span>
                 </button>
@@ -40,82 +46,91 @@
         </div>
     </nav>
 
-    <!-- Hero 区域 -->
+    <!-- Hero -->
     <header class="hero" id="home">
-        <div class="hero-bg">
-            <div class="hero-circle circle-1"></div>
-            <div class="hero-circle circle-2"></div>
-            <div class="hero-grid-pattern"></div>
+        <div class="hero-particles" aria-hidden="true">
+            <div class="particle p1"></div><div class="particle p2"></div><div class="particle p3"></div>
+            <div class="particle p4"></div><div class="particle p5"></div><div class="particle p6"></div>
         </div>
         <div class="container hero-container">
             <div class="hero-content">
-                <div class="hero-badge">
-                    <span class="badge-dot"></span> 领先的科技解决方案提供商
+                <div class="hero-tag">
+                    <span class="tag-accent">同济大学 × 相城区政府 共建</span>
                 </div>
                 <h1 class="hero-title">
-                    用科技驱动<span class="text-gradient">企业数字化</span><br>转型升级
+                    科技赋能<span class="text-accent">孵化创新</span><br>
+                    构建机器人与AI<span class="text-accent">企业生态</span>
                 </h1>
-                <p class="hero-subtitle">
-                    我们为企业提供全方位数字化解决方案，涵盖云计算、人工智能、大数据分析等领域，
-                    助力企业降本增效、实现可持续增长。
+                <p class="hero-desc">
+                    依托同济大学机器人与人工智能实验室的核心技术力量，以科技服务能力为引擎，
+                    引进、孵化、培育机器人与人工智能领域科技型企业，打造产学研深度融合的创新高地。
                 </p>
-                <div class="hero-cta">
-                    <a href="#contact" class="btn btn-primary btn-large">
-                        立即咨询
-                        <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
-                            <path d="M4 10h12m0 0l-5-5m5 5l-5 5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                        </svg>
+                <div class="hero-actions">
+                    <a href="#incubation" class="btn btn-primary btn-lg">
+                        了解孵化服务
+                        <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M4 10h12m0 0l-5-5m5 5l-5 5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
                     </a>
-                    <a href="#products" class="btn btn-outline btn-large">了解产品</a>
+                    <a href="#contact" class="btn btn-outline btn-lg">申请入驻</a>
                 </div>
-                <div class="hero-stats">
-                    <div class="stat-item">
-                        <span class="stat-number"><span data-counter="500">0</span>+</span>
-                        <span class="stat-label">服务企业</span>
+                <div class="hero-metrics">
+                    <div class="metric">
+                        <span class="metric-num"><span data-counter="30">0</span>+</span>
+                        <span class="metric-label">在孵科技企业</span>
                     </div>
-                    <div class="stat-divider"></div>
-                    <div class="stat-item">
-                        <span class="stat-number"><span data-counter="98">0</span>%</span>
-                        <span class="stat-label">客户满意度</span>
+                    <div class="metric-divider"></div>
+                    <div class="metric">
+                        <span class="metric-num"><span data-counter="50">0</span>+</span>
+                        <span class="metric-label">科研成果转化</span>
                     </div>
-                    <div class="stat-divider"></div>
-                    <div class="stat-item">
-                        <span class="stat-number"><span data-counter="50">0</span>+</span>
-                        <span class="stat-label">技术专利</span>
+                    <div class="metric-divider"></div>
+                    <div class="metric">
+                        <span class="metric-num"><span data-counter="200">0</span>+</span>
+                        <span class="metric-label">科研团队成员</span>
                     </div>
                 </div>
             </div>
             <div class="hero-visual">
-                <div class="hero-dashboard">
-                    <div class="dashboard-header">
-                        <span class="dashboard-dots"><span></span><span></span><span></span></span>
-                        <span class="dashboard-title">数据驾驶舱</span>
+                <div class="hero-card">
+                    <div class="hc-header">
+                        <span class="hc-dots"><i></i><i></i><i></i></span>
+                        <span class="hc-title">科技孵化全景</span>
                     </div>
-                    <div class="dashboard-body">
-                        <div class="chart-placeholder">
-                            <svg viewBox="0 0 300 150" class="chart-line">
-                                <polyline fill="none" stroke="#3b82f6" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"
-                                    points="0,120 30,100 60,110 90,80 120,90 150,50 180,60 210,30 240,40 270,15 300,20"/>
-                                <polyline fill="url(#areaGrad)" stroke="none"
-                                    points="0,150 0,120 30,100 60,110 90,80 120,90 150,50 180,60 210,30 240,40 270,15 300,20 300,150"/>
-                                <defs>
-                                    <linearGradient id="areaGrad" x1="0" y1="0" x2="0" y2="1">
-                                        <stop offset="0%" stop-color="#3b82f6" stop-opacity="0.3"/>
-                                        <stop offset="100%" stop-color="#3b82f6" stop-opacity="0"/>
-                                    </linearGradient>
-                                </defs>
-                            </svg>
-                        </div>
-                        <div class="dashboard-cards">
-                            <div class="d-card">
-                                <span class="d-card-label">月活用户</span>
-                                <span class="d-card-value">128,560</span>
-                                <span class="d-card-trend up">▲ 12.5%</span>
+                    <div class="hc-body">
+                        <div class="incubation-flow">
+                            <div class="flow-node">
+                                <div class="fn-icon" style="background:#e8f0fe;">
+                                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#1B3A5C" stroke-width="2"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-6 8-6s8 2 8 6"/></svg>
+                                </div>
+                                <span>项目引进</span>
                             </div>
-                            <div class="d-card">
-                                <span class="d-card-label">系统可用率</span>
-                                <span class="d-card-value">99.99%</span>
-                                <span class="d-card-trend up">▲ 0.02%</span>
+                            <div class="flow-connector"><span></span></div>
+                            <div class="flow-node">
+                                <div class="fn-icon" style="background:#e8f0fe;">
+                                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#1B3A5C" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/></svg>
+                                </div>
+                                <span>技术赋能</span>
+                            </div>
+                            <div class="flow-connector"><span></span></div>
+                            <div class="flow-node">
+                                <div class="fn-icon" style="background:#e8f0fe;">
+                                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#1B3A5C" stroke-width="2"><polyline points="22,12 18,12 15,21 9,3 6,12 2,12"/></svg>
+                                </div>
+                                <span>加速成长</span>
+                            </div>
+                            <div class="flow-connector"><span></span></div>
+                            <div class="flow-node">
+                                <div class="fn-icon" style="background:#C4973B;color:#fff;">
+                                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2"><polygon points="13,2 3,14 12,14 11,22 21,10 12,10"/></svg>
+                                </div>
+                                <span>产业落地</span>
+                            </div>
+                        </div>
+                        <div class="hc-stats-row">
+                            <div class="hc-stat">
+                                <span>30+</span><small>在孵企业</small>
+                            </div>
+                            <div class="hc-stat">
+                                <span>¥5亿+</span><small>带动产值</small>
                             </div>
                         </div>
                     </div>
@@ -127,231 +142,304 @@
     <!-- 关于我们 -->
     <section class="section" id="about">
         <div class="container">
-            <div class="section-header">
-                <span class="section-tag">关于我们</span>
-                <h2 class="section-title">用技术创新定义<span class="text-gradient">未来商业</span></h2>
-                <p class="section-subtitle">公司成立于2018年，总部位于深圳，是国内领先的企业级科技解决方案提供商。</p>
-            </div>
-            <div class="about-grid">
-                <div class="about-card">
-                    <div class="about-icon" style="background:#eff6ff;">
-                        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#3b82f6" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
-                    </div>
-                    <h3>使命驱动</h3>
-                    <p>以技术赋能千行百业，让每家企业都能享受数字化红利。</p>
-                </div>
-                <div class="about-card">
-                    <div class="about-icon" style="background:#f0fdf4;">
-                        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#22c55e" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
-                    </div>
-                    <h3>技术沉淀</h3>
-                    <p>超过50项核心专利，构建从底层基础设施到上层应用的完整技术栈。</p>
-                </div>
-                <div class="about-card">
-                    <div class="about-icon" style="background:#fef3c7;">
-                        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#f59e0b" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
-                    </div>
-                    <h3>精英团队</h3>
-                    <p>核心成员来自BAT等一线互联网企业，拥有丰富的行业经验和技术实力。</p>
-                </div>
-            </div>
-            <div class="about-mission">
-                <div class="mission-quote">
-                    <p>"我们的愿景是成为国内最受信赖的企业数字化伙伴，帮助每一家企业释放数据与技术的力量。"</p>
-                    <span class="mission-author">— 创始人 & CEO</span>
-                </div>
-            </div>
-        </div>
-    </section>
+            <div class="section-label">关于我们</div>
+            <h2 class="section-heading">产学研深度融合的<span class="text-accent">创新平台</span></h2>
+            <p class="section-lead">由同济大学与苏州市相城区政府联合共建，以顶尖学术力量驱动产业创新</p>
 
-    <!-- 产品服务 -->
-    <section class="section section-alt" id="products">
-        <div class="container">
-            <div class="section-header">
-                <span class="section-tag">产品服务</span>
-                <h2 class="section-title">全方位<span class="text-gradient">数字化解决方案</span></h2>
-                <p class="section-subtitle">覆盖企业IT全链路需求，从基础设施到业务应用一站满足</p>
-            </div>
-            <div class="products-grid">
-                <div class="product-card">
-                    <div class="product-header">
-                        <div class="product-icon" style="background:#eff6ff;">
-                            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#3b82f6" stroke-width="2"><rect x="2" y="2" width="20" height="8" rx="2"/><rect x="2" y="14" width="20" height="8" rx="2"/><circle cx="6" cy="6" r="1" fill="#3b82f6"/><circle cx="6" cy="18" r="1" fill="#3b82f6"/></svg>
+            <div class="about-main">
+                <div class="about-text">
+                    <p class="about-intro">
+                        同济人工智能（苏州）研究院由<strong>同济大学</strong>与<strong>苏州市相城区政府</strong>联合共建，
+                        坐落于长三角创新高地——苏州。研究院核心技术团队源自
+                        <strong>同济大学机器人与人工智能实验室</strong>，该实验室是国内最早开展机器人
+                        与人工智能研究的学术机构之一，在具身智能、自主导航、多模态感知等领域积累了
+                        深厚的科研底蕴。
+                    </p>
+                    <div class="about-highlights">
+                        <div class="hl-item">
+                            <div class="hl-icon">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#C4973B" stroke-width="2.5"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22,4 12,14.01 9,11.01"/></svg>
+                            </div>
+                            <span>同济大学直属科研机构</span>
                         </div>
-                        <span class="product-badge">热门</span>
-                    </div>
-                    <h3>CloudPlatform 云平台</h3>
-                    <p>弹性、安全的企业级云基础设施，支持混合云部署，99.99%可用性保障。</p>
-                    <ul class="product-features">
-                        <li>弹性伸缩，按需付费</li>
-                        <li>多地容灾备份</li>
-                        <li>企业级安全合规</li>
-                    </ul>
-                    <a href="#contact" class="product-link">了解更多 →</a>
-                </div>
-                <div class="product-card">
-                    <div class="product-header">
-                        <div class="product-icon" style="background:#f0fdf4;">
-                            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#22c55e" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7,10 12,15 17,10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                        <div class="hl-item">
+                            <div class="hl-icon">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#C4973B" stroke-width="2.5"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22,4 12,14.01 9,11.01"/></svg>
+                            </div>
+                            <span>相城区政府重点支持平台</span>
+                        </div>
+                        <div class="hl-item">
+                            <div class="hl-icon">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#C4973B" stroke-width="2.5"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22,4 12,14.01 9,11.01"/></svg>
+                            </div>
+                            <span>200+ 人科研团队支撑</span>
+                        </div>
+                        <div class="hl-item">
+                            <div class="hl-icon">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#C4973B" stroke-width="2.5"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22,4 12,14.01 9,11.01"/></svg>
+                            </div>
+                            <span>长三角机器人产业核心节点</span>
                         </div>
                     </div>
-                    <h3>DataInsight 数据分析</h3>
-                    <p>一站式大数据分析平台，从数据采集到可视化大屏，实时洞察业务动态。</p>
-                    <ul class="product-features">
-                        <li>实时数据流处理</li>
-                        <li>拖拽式可视化看板</li>
-                        <li>AI智能预警分析</li>
-                    </ul>
-                    <a href="#contact" class="product-link">了解更多 →</a>
                 </div>
-                <div class="product-card">
-                    <div class="product-header">
-                        <div class="product-icon" style="background:#fef3c7;">
-                            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#f59e0b" stroke-width="2"><path d="M12 2a10 10 0 100 20 10 10 0 000-20z"/><path d="M12 6v6l4 2"/></svg>
+                <div class="about-image">
+                    <div class="about-visual">
+                        <div class="av-top">
+                            <div class="av-badge av-badge-tj">同济大学</div>
+                            <div class="av-connector">
+                                <span class="av-line"></span>
+                                <span class="av-plus">+</span>
+                                <span class="av-line"></span>
+                            </div>
+                            <div class="av-badge av-badge-xc">相城区政府</div>
                         </div>
-                        <span class="product-badge">新品</span>
-                    </div>
-                    <h3>AIWorks 智能平台</h3>
-                    <p>融合大语言模型与行业 know-how，为企业提供智能客服、文档分析、知识管理。</p>
-                    <ul class="product-features">
-                        <li>私有化模型部署</li>
-                        <li>行业知识库定制</li>
-                        <li>多轮对话引擎</li>
-                    </ul>
-                    <a href="#contact" class="product-link">了解更多 →</a>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- 核心优势 -->
-    <section class="section" id="advantages">
-        <div class="container">
-            <div class="section-header">
-                <span class="section-tag">核心优势</span>
-                <h2 class="section-title">为什么选择<span class="text-gradient">我们？</span></h2>
-                <p class="section-subtitle">五大核心能力构筑竞争壁垒，为企业数字化保驾护航</p>
-            </div>
-            <div class="advantages-timeline">
-                <div class="adv-item">
-                    <div class="adv-number">01</div>
-                    <div class="adv-content">
-                        <h3>全栈技术能力</h3>
-                        <p>从IaaS到SaaS，覆盖云计算、大数据、AI、IoT完整技术栈，无需多供应商整合。</p>
-                    </div>
-                </div>
-                <div class="adv-item">
-                    <div class="adv-number">02</div>
-                    <div class="adv-content">
-                        <h3>行业深度定制</h3>
-                        <p>深耕金融、制造、零售等多个行业，提供贴合业务场景的专属解决方案。</p>
-                    </div>
-                </div>
-                <div class="adv-item">
-                    <div class="adv-number">03</div>
-                    <div class="adv-content">
-                        <h3>安全合规保障</h3>
-                        <p>通过ISO 27001、等保三级认证，数据加密传输与存储，让企业安心上云。</p>
-                    </div>
-                </div>
-                <div class="adv-item">
-                    <div class="adv-number">04</div>
-                    <div class="adv-content">
-                        <h3>7×24小时运维</h3>
-                        <p>专业运维团队全天候监控，15分钟响应机制，为业务连续性保驾护航。</p>
-                    </div>
-                </div>
-                <div class="adv-item">
-                    <div class="adv-number">05</div>
-                    <div class="adv-content">
-                        <h3>敏捷交付模式</h3>
-                        <p>标准化产品+轻量定制，平均30天即可上线核心功能，快速验证业务价值。</p>
+                        <div class="av-arrow-down">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#C4973B" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><polyline points="19,12 12,19 5,12"/></svg>
+                        </div>
+                        <div class="av-result">人工智能（苏州）研究院</div>
+                        <div class="av-pillars">
+                            <span>科研平台</span>
+                            <span>孵化载体</span>
+                            <span>转化桥梁</span>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- 客户案例 -->
-    <section class="section section-alt" id="cases">
+    <!-- 科技孵化 -->
+    <section class="section section-dark" id="incubation">
+        <div class="section-bg-pattern"></div>
         <div class="container">
-            <div class="section-header">
-                <span class="section-tag">客户案例</span>
-                <h2 class="section-title">携手<span class="text-gradient">500+企业</span>共创价值</h2>
-                <p class="section-subtitle">来自不同行业的真实数字化转型实践</p>
+            <div class="section-label section-label-light">核心业务</div>
+            <h2 class="section-heading section-heading-light">科技<span class="text-accent">孵化</span></h2>
+            <p class="section-lead section-lead-light">
+                以科技服务能力为核心，引进、孵化、培育机器人与人工智能领域科技型企业
+            </p>
+
+            <div class="incubation-model">
+                <div class="im-card">
+                    <div class="im-num">01</div>
+                    <div class="im-icon-wrap">
+                        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#C4973B" stroke-width="1.5"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.3-4.3"/></svg>
+                    </div>
+                    <h3>项目引进与筛选</h3>
+                    <p>依托同济大学科研网络与行业资源，精准识别高潜力机器人与AI初创项目，面向全球引进优质科技企业入驻。</p>
+                </div>
+                <div class="im-card">
+                    <div class="im-num">02</div>
+                    <div class="im-icon-wrap">
+                        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#C4973B" stroke-width="1.5"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8"/><path d="M12 17v4"/></svg>
+                    </div>
+                    <h3>技术赋能与研发支持</h3>
+                    <p>开放研究院实验室资源，提供算法、算力、数据三位一体的技术支持，降低企业研发门槛，加速产品迭代。</p>
+                </div>
+                <div class="im-card">
+                    <div class="im-num">03</div>
+                    <div class="im-icon-wrap">
+                        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#C4973B" stroke-width="1.5"><path d="M12 20V10"/><path d="M18 20V4"/><path d="M6 20v-4"/></svg>
+                    </div>
+                    <h3>企业加速与成长服务</h3>
+                    <p>提供商业模式辅导、产业资源对接、投融资支持等全周期孵化服务，助力在孵企业快速成长并实现产业化。</p>
+                </div>
+                <div class="im-card">
+                    <div class="im-num">04</div>
+                    <div class="im-icon-wrap">
+                        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#C4973B" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+                    </div>
+                    <h3>产业生态构建</h3>
+                    <p>建立企业与高校、政府、资本之间的高效连接，构建机器人与人工智能企业共生共荣的产业生态圈。</p>
+                </div>
             </div>
-            <div class="cases-grid">
-                <div class="case-card">
-                    <div class="case-tag">金融科技</div>
-                    <h3>某大型商业银行 — 智能风控平台</h3>
-                    <p>基于大数据与机器学习构建实时风控系统，将欺诈识别准确率提升至99.2%，年减少损失超2亿元。</p>
-                    <div class="case-metrics">
-                        <div><span>99.2%</span> 识别准确率</div>
-                        <div><span>50ms</span> 响应延迟</div>
+
+            <div class="incubation-services">
+                <h3 class="is-title">孵化服务矩阵</h3>
+                <div class="is-grid">
+                    <div class="is-item">
+                        <span class="is-item-icon">🔬</span>
+                        <span>技术研发平台</span>
                     </div>
-                </div>
-                <div class="case-card">
-                    <div class="case-tag" style="background:#dcfce7;color:#16a34a;">智能制造</div>
-                    <h3>某新能源车企 — 工业互联网平台</h3>
-                    <p>打通生产、供应链、销售全链路数据，实现产线效率提升35%，库存周转率提升2倍。</p>
-                    <div class="case-metrics">
-                        <div><span>35%</span> 效率提升</div>
-                        <div><span>2x</span> 周转加速</div>
+                    <div class="is-item">
+                        <span class="is-item-icon">💡</span>
+                        <span>知识产权服务</span>
                     </div>
-                </div>
-                <div class="case-card">
-                    <div class="case-tag" style="background:#fef3c7;color:#d97706;">新零售</div>
-                    <h3>某连锁零售品牌 — 全域数据中台</h3>
-                    <p>整合线上线下1200+门店数据，建立统一用户画像，实现精准营销ROI提升200%。</p>
-                    <div class="case-metrics">
-                        <div><span>1200+</span> 门店覆盖</div>
-                        <div><span>200%</span> ROI提升</div>
+                    <div class="is-item">
+                        <span class="is-item-icon">🎓</span>
+                        <span>人才引进培养</span>
                     </div>
-                </div>
-            </div>
-            <div class="cases-clients">
-                <span class="clients-label">合作伙伴</span>
-                <div class="clients-logos">
-                    <div class="client-logo-placeholder">银行A</div>
-                    <div class="client-logo-placeholder">科技B</div>
-                    <div class="client-logo-placeholder">制造C</div>
-                    <div class="client-logo-placeholder">零售D</div>
-                    <div class="client-logo-placeholder">金融E</div>
-                    <div class="client-logo-placeholder">医疗F</div>
+                    <div class="is-item">
+                        <span class="is-item-icon">💰</span>
+                        <span>投融资对接</span>
+                    </div>
+                    <div class="is-item">
+                        <span class="is-item-icon">🏛️</span>
+                        <span>政策申报辅导</span>
+                    </div>
+                    <div class="is-item">
+                        <span class="is-item-icon">🌐</span>
+                        <span>市场拓展支持</span>
+                    </div>
+                    <div class="is-item">
+                        <span class="is-item-icon">⚖️</span>
+                        <span>法律财税服务</span>
+                    </div>
+                    <div class="is-item">
+                        <span class="is-item-icon">🤝</span>
+                        <span>产业资源对接</span>
+                    </div>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- 技术架构 -->
-    <section class="section" id="tech">
+    <!-- 成果转化 -->
+    <section class="section" id="transfer">
         <div class="container">
-            <div class="section-header">
-                <span class="section-tag">技术能力</span>
-                <h2 class="section-title">坚实可靠的<span class="text-gradient">技术底座</span></h2>
-                <p class="section-subtitle">经过百万级并发验证的技术架构</p>
+            <div class="section-label">科技成果</div>
+            <h2 class="section-heading">成果<span class="text-accent">转化</span></h2>
+            <p class="section-lead">
+                基于同济大学前沿科研成果，推动技术从实验室走向产业化，服务苏州本地企业与孵化生态
+            </p>
+
+            <div class="transfer-pipeline">
+                <div class="tp-stage">
+                    <div class="tp-circle tp-circle-1">
+                        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+                    </div>
+                    <h4>科研成果储备</h4>
+                    <p>源自同济大学机器人与人工智能实验室的50+项核心专利与技术成果</p>
+                </div>
+                <div class="tp-arrow">→</div>
+                <div class="tp-stage">
+                    <div class="tp-circle tp-circle-2">
+                        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+                    </div>
+                    <h4>中试验证</h4>
+                    <p>在研究院平台上进行技术可行性验证与产品原型开发</p>
+                </div>
+                <div class="tp-arrow">→</div>
+                <div class="tp-stage">
+                    <div class="tp-circle tp-circle-3">
+                        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7,10 12,15 17,10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                    </div>
+                    <h4>产业落地</h4>
+                    <p>面向苏州本地企业与孵化器内企业实现技术成果的商业化应用</p>
+                </div>
             </div>
-            <div class="tech-stack">
-                <div class="tech-layer">
-                    <h4>业务应用层</h4>
-                    <div class="tech-tags">
-                        <span>SaaS平台</span><span>数据分析</span><span>AI应用</span><span>IoT平台</span>
+
+            <div class="transfer-focus">
+                <h3 class="tf-heading">重点转化方向</h3>
+                <div class="tf-grid">
+                    <div class="tf-card">
+                        <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='64' height='64' viewBox='0 0 64 64'%3E%3Ccircle cx='32' cy='32' r='30' fill='%23e8f0fe'/%3E%3Crect x='20' y='18' width='24' height='28' rx='4' fill='%231B3A5C'/%3E%3Ccircle cx='32' cy='30' r='5' fill='%23C4973B'/%3E%3Crect x='27' y='39' width='10' height='2' rx='1' fill='%23C4973B'/%3E%3C/svg%3E" alt="" class="tf-card-img" width="64" height="64">
+                        <h4>具身智能</h4>
+                        <p>机器人自主感知、决策与执行，覆盖工业与服务场景</p>
+                    </div>
+                    <div class="tf-card">
+                        <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='64' height='64' viewBox='0 0 64 64'%3E%3Ccircle cx='32' cy='32' r='30' fill='%23e8f0fe'/%3E%3Cpath d='M20 32 L28 20 L36 32 L28 28 Z' fill='%231B3A5C'/%3E%3Ccircle cx='44' cy='26' r='6' fill='none' stroke='%23C4973B' stroke-width='2.5'/%3E%3C/svg%3E" alt="" class="tf-card-img" width="64" height="64">
+                        <h4>自主导航</h4>
+                        <p>SLAM、路径规划与多机协同调度系统</p>
+                    </div>
+                    <div class="tf-card">
+                        <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='64' height='64' viewBox='0 0 64 64'%3E%3Ccircle cx='32' cy='32' r='30' fill='%23e8f0fe'/%3E%3Ccircle cx='32' cy='28' r='8' fill='%231B3A5C'/%3E%3Ccircle cx='28' cy='25' r='2.5' fill='%23C4973B'/%3E%3Ccircle cx='36' cy='25' r='2.5' fill='%23C4973B'/%3E%3Cpath d='M25 35 Q32 40 39 35' stroke='%23C4973B' stroke-width='2' fill='none'/%3E%3C/svg%3E" alt="" class="tf-card-img" width="64" height="64">
+                        <h4>多模态感知</h4>
+                        <p>视觉、激光雷达、力觉融合的环境理解技术</p>
+                    </div>
+                    <div class="tf-card">
+                        <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='64' height='64' viewBox='0 0 64 64'%3E%3Ccircle cx='32' cy='32' r='30' fill='%23e8f0fe'/%3E%3Cpath d='M22 42 L22 30 A10 10 0 0 1 42 30 L42 42' fill='%231B3A5C' opacity='0.3'/%3E%3Ccircle cx='32' cy='22' r='6' fill='%231B3A5C'/%3E%3Cline x1='26' y1='48' x2='38' y2='48' stroke='%23C4973B' stroke-width='3'/%3E%3C/svg%3E" alt="" class="tf-card-img" width="64" height="64">
+                        <h4>人机协作</h4>
+                        <p>安全交互、意图理解与柔性控制技术</p>
                     </div>
                 </div>
-                <div class="tech-arrow">↓</div>
-                <div class="tech-layer">
-                    <h4>平台服务层</h4>
-                    <div class="tech-tags">
-                        <span>微服务</span><span>消息队列</span><span>API网关</span><span>容器编排</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- 孵化生态 -->
+    <section class="section section-alt" id="ecosystem">
+        <div class="container">
+            <div class="section-label">孵化生态</div>
+            <h2 class="section-heading">机器人与AI<span class="text-accent">企业生态圈</span></h2>
+            <p class="section-lead">汇聚创新力量，构建共生共荣的产业共同体</p>
+
+            <div class="eco-overview">
+                <div class="eco-stat-big">
+                    <span class="eco-num">30+</span>
+                    <span class="eco-desc">在孵科技企业</span>
+                </div>
+                <div class="eco-stat-big">
+                    <span class="eco-num">3</span>
+                    <span class="eco-desc">核心产业方向</span>
+                </div>
+                <div class="eco-stat-big">
+                    <span class="eco-num">100+</span>
+                    <span class="eco-desc">产业合作伙伴</span>
+                </div>
+            </div>
+
+            <div class="eco-fields">
+                <div class="eco-field">
+                    <div class="ef-header">
+                        <span class="ef-icon">🤖</span>
+                        <h3>工业机器人</h3>
+                    </div>
+                    <p>聚焦智能装配、柔性制造、3C电子等细分领域，培育具有核心自主技术的工业机器人企业。</p>
+                    <div class="ef-tags">
+                        <span>智能装配</span><span>柔性制造</span><span>机器视觉</span><span>运动控制</span>
                     </div>
                 </div>
-                <div class="tech-arrow">↓</div>
-                <div class="tech-layer">
-                    <h4>基础设施层</h4>
-                    <div class="tech-tags">
-                        <span>云服务器</span><span>分布式存储</span><span>CDN</span><span>负载均衡</span>
+                <div class="eco-field">
+                    <div class="ef-header">
+                        <span class="ef-icon">🧠</span>
+                        <h3>人工智能</h3>
+                    </div>
+                    <p>围绕大模型应用、计算机视觉、自然语言处理等技术，孵化面向垂直行业的AI解决方案提供商。</p>
+                    <div class="ef-tags">
+                        <span>大模型</span><span>计算机视觉</span><span>NLP</span><span>AIoT</span>
                     </div>
                 </div>
+                <div class="eco-field">
+                    <div class="ef-header">
+                        <span class="ef-icon">⚡</span>
+                        <h3>智能装备</h3>
+                    </div>
+                    <p>推进智能传感器、嵌入式系统、边缘计算等底层技术产业化，服务高端装备制造升级。</p>
+                    <div class="ef-tags">
+                        <span>智能传感器</span><span>边缘计算</span><span>嵌入式AI</span><span>自动驾驶</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 合作伙伴 -->
+            <div class="eco-partners">
+                <h3 class="ep-heading">生态合作伙伴</h3>
+                <div class="ep-grid">
+                    <div class="ep-logo">同济大学</div>
+                    <div class="ep-logo">相城区政府</div>
+                    <div class="ep-logo">苏州工业园区</div>
+                    <div class="ep-logo">长三角G60科创走廊</div>
+                    <div class="ep-logo">国家机器人创新中心</div>
+                    <div class="ep-logo">苏州大学</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 愿景 -->
+    <section class="section section-vision" id="vision">
+        <div class="container">
+            <div class="vision-block">
+                <div class="vision-quote-mark">
+                    <svg width="48" height="48" viewBox="0 0 48 48" fill="none"><path d="M14 36H4l8-16h-6L16 4h8L14 36zm24 0H28l8-16h-6L40 4h8L38 36z" fill="#C4973B" opacity="0.3"/></svg>
+                </div>
+                <blockquote class="vision-text">
+                    构建<span class="text-accent">机器人与人工智能企业生态圈</span>，
+                    以同济大学顶尖科研实力为根基，以苏州产业沃土为依托，
+                    让每一家入孵企业都能获得从技术到市场的全链路赋能，
+                    共同推动中国智造迈向全球前沿。
+                </blockquote>
+                <p class="vision-source">— 同济人工智能（苏州）研究院</p>
             </div>
         </div>
     </section>
@@ -359,83 +447,81 @@
     <!-- 联系我们 -->
     <section class="section section-alt" id="contact">
         <div class="container">
-            <div class="section-header">
-                <span class="section-tag">联系我们</span>
-                <h2 class="section-title">开启<span class="text-gradient">数字化之旅</span></h2>
-                <p class="section-subtitle">留下您的需求，我们将在24小时内与您联系</p>
-            </div>
-            <div class="contact-wrapper">
-                <div class="contact-info">
-                    <div class="contact-info-card">
-                        <div class="contact-icon-wrap">
-                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#3b82f6" stroke-width="2"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07 19.5 19.5 0 01-6-6 19.79 19.79 0 01-3.07-8.67A2 2 0 014.11 2h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L8.09 9.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg>
+            <div class="section-label">联系我们</div>
+            <h2 class="section-heading">加入<span class="text-accent">孵化生态</span></h2>
+            <p class="section-lead">如果您是机器人与AI领域的创业团队，欢迎申请入驻</p>
+
+            <div class="contact-layout">
+                <div class="contact-info-col">
+                    <div class="ci-card">
+                        <div class="ci-icon">
+                            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#C4973B" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
                         </div>
                         <div>
-                            <span class="contact-label">咨询热线</span>
-                            <span class="contact-value">400-XXX-XXXX</span>
+                            <span class="ci-label">研究院地址</span>
+                            <span class="ci-value">苏州市相城区高铁新城<br>同济人工智能（苏州）研究院</span>
                         </div>
                     </div>
-                    <div class="contact-info-card">
-                        <div class="contact-icon-wrap">
-                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#3b82f6" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+                    <div class="ci-card">
+                        <div class="ci-icon">
+                            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#C4973B" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
                         </div>
                         <div>
-                            <span class="contact-label">电子邮箱</span>
-                            <span class="contact-value">contact@yourcompany.com</span>
+                            <span class="ci-label">联系邮箱</span>
+                            <span class="ci-value">contact@tjai-suzhou.cn</span>
                         </div>
                     </div>
-                    <div class="contact-info-card">
-                        <div class="contact-icon-wrap">
-                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#3b82f6" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
+                    <div class="ci-card">
+                        <div class="ci-icon">
+                            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#C4973B" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
                         </div>
                         <div>
-                            <span class="contact-label">公司地址</span>
-                            <span class="contact-value">深圳市南山区科技园XX栋XX层</span>
+                            <span class="ci-label">咨询电话</span>
+                            <span class="ci-value">0512-XXXX-XXXX</span>
                         </div>
                     </div>
                 </div>
+
                 <form class="contact-form" id="contactForm">
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label for="name">您的姓名 *</label>
-                            <input type="text" id="name" placeholder="请输入姓名" required>
+                    <div class="form-duo">
+                        <div class="form-field">
+                            <label for="cname">联系人 *</label>
+                            <input type="text" id="cname" placeholder="您的姓名" required>
                         </div>
-                        <div class="form-group">
-                            <label for="company">公司名称</label>
-                            <input type="text" id="company" placeholder="请输入公司名称">
-                        </div>
-                    </div>
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label for="phone">联系电话 *</label>
-                            <input type="tel" id="phone" placeholder="请输入联系电话" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="email">电子邮箱</label>
-                            <input type="email" id="email" placeholder="请输入邮箱">
+                        <div class="form-field">
+                            <label for="ccompany">企业/团队名称</label>
+                            <input type="text" id="ccompany" placeholder="企业或团队名称">
                         </div>
                     </div>
-                    <div class="form-group full">
-                        <label for="interest">关注方向</label>
-                        <select id="interest">
-                            <option value="">请选择关注方向</option>
-                            <option>云平台 / CloudPlatform</option>
-                            <option>数据分析 / DataInsight</option>
-                            <option>AI智能平台 / AIWorks</option>
+                    <div class="form-duo">
+                        <div class="form-field">
+                            <label for="cphone">联系电话 *</label>
+                            <input type="tel" id="cphone" placeholder="手机号码" required>
+                        </div>
+                        <div class="form-field">
+                            <label for="cemail">电子邮箱</label>
+                            <input type="email" id="cemail" placeholder="联系邮箱">
+                        </div>
+                    </div>
+                    <div class="form-field">
+                        <label for="cdirection">关注方向</label>
+                        <select id="cdirection">
+                            <option value="">请选择</option>
+                            <option>科技孵化 / 入驻申请</option>
+                            <option>成果转化 / 技术合作</option>
+                            <option>产业投资 / 资源对接</option>
                             <option>其他 / 综合咨询</option>
                         </select>
                     </div>
-                    <div class="form-group full">
-                        <label for="message">需求描述</label>
-                        <textarea id="message" rows="4" placeholder="请简述您的需求或想要了解的内容..."></textarea>
+                    <div class="form-field">
+                        <label for="cmessage">项目简介</label>
+                        <textarea id="cmessage" rows="4" placeholder="请简要介绍您的项目或合作意向..."></textarea>
                     </div>
-                    <button type="submit" class="btn btn-primary btn-large btn-full">
-                        提交需求
-                        <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
-                            <path d="M4 10h12m0 0l-5-5m5 5l-5 5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                        </svg>
+                    <button type="submit" class="btn btn-primary btn-lg btn-block">
+                        提交申请
+                        <svg width="18" height="18" viewBox="0 0 20 20" fill="none"><path d="M4 10h12m0 0l-5-5m5 5l-5 5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
                     </button>
-                    <p class="form-notice">提交即表示您同意我们的<a href="#">隐私政策</a></p>
+                    <p class="form-tip">提交即表示您同意我们的隐私政策</p>
                 </form>
             </div>
         </div>
@@ -444,43 +530,48 @@
     <!-- 页脚 -->
     <footer class="footer">
         <div class="container">
-            <div class="footer-grid">
+            <div class="footer-main">
                 <div class="footer-brand">
-                    <a href="#" class="nav-logo footer-logo">
-                        <span class="logo-icon">T</span>
-                        <span class="logo-text">您的公司</span>
-                    </a>
-                    <p>专注于为企业提供领先的数字化解决方案与服务，助力千行百业释放数据与技术的力量。</p>
+                    <div class="footer-logo">
+                        <div class="logo-mark footer-mark">
+                            <span class="logo-cn">同济</span>
+                            <span class="logo-en">TJ·AI</span>
+                        </div>
+                        <div class="logo-text-wrap">
+                            <span class="footer-name">人工智能（苏州）研究院</span>
+                            <span class="footer-name-en">Tongji AI Institute (Suzhou)</span>
+                        </div>
+                    </div>
+                    <p>由同济大学与苏州市相城区政府联合共建的机器人与人工智能领域专业孵化平台。</p>
                 </div>
-                <div class="footer-links">
-                    <h4>产品服务</h4>
+                <div class="footer-col">
+                    <h4>核心业务</h4>
                     <ul>
-                        <li><a href="#products">CloudPlatform 云平台</a></li>
-                        <li><a href="#products">DataInsight 数据分析</a></li>
-                        <li><a href="#products">AIWorks 智能平台</a></li>
+                        <li><a href="#incubation">科技孵化</a></li>
+                        <li><a href="#transfer">成果转化</a></li>
+                        <li><a href="#ecosystem">孵化生态</a></li>
                     </ul>
                 </div>
-                <div class="footer-links">
+                <div class="footer-col">
                     <h4>关于我们</h4>
                     <ul>
-                        <li><a href="#about">公司介绍</a></li>
-                        <li><a href="#advantages">核心优势</a></li>
-                        <li><a href="#cases">客户案例</a></li>
-                        <li><a href="#">加入我们</a></li>
+                        <li><a href="#about">研究院简介</a></li>
+                        <li><a href="#vision">愿景使命</a></li>
+                        <li><a href="#contact">加入我们</a></li>
                     </ul>
                 </div>
-                <div class="footer-links">
+                <div class="footer-col">
                     <h4>联系方式</h4>
-                    <ul>
-                        <li>400-XXX-XXXX</li>
-                        <li>contact@yourcompany.com</li>
-                        <li>深圳市南山区科技园</li>
+                    <ul class="footer-contact">
+                        <li>苏州市相城区高铁新城</li>
+                        <li>contact@tjai-suzhou.cn</li>
+                        <li>0512-XXXX-XXXX</li>
                     </ul>
                 </div>
             </div>
             <div class="footer-bottom">
-                <p>&copy; 2024 您的公司名称. All rights reserved. | <a href="#">隐私政策</a> | <a href="#">使用条款</a></p>
-                <p class="footer-icp">粤ICP备XXXXXXXX号-X</p>
+                <span>&copy; 2024 同济人工智能（苏州）研究院. All rights reserved.</span>
+                <span class="footer-icp">苏ICP备XXXXXXXX号-X</span>
             </div>
         </div>
     </footer>
