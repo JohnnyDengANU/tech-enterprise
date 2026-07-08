@@ -513,6 +513,17 @@ img { max-width: 100%; display: block; }
 }
 .toast.show { opacity: 1; transform: translateY(0); }
 .toast.success { background: #059669; }
+.toast.error { background: #dc2626; }
+
+/* Form Loading State */
+.btn-loading { pointer-events: none; opacity: 0.85; }
+.btn-spinner {
+    display: inline-block; width: 16px; height: 16px;
+    border: 2px solid rgba(255,255,255,0.3); border-top-color: #fff;
+    border-radius: 50%; animation: spin 0.6s linear infinite;
+    vertical-align: middle; margin-right: 6px;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
 
 /* ===== Responsive ===== */
 @media (max-width: 1024px) {
@@ -594,4 +605,5 @@ img { max-width: 100%; display: block; }
     .about-highlights { grid-template-columns: 1fr; }
     .is-grid { grid-template-columns: 1fr; }
     .contact-form { padding: 20px; }
+    .toast { left: 16px; right: 16px; bottom: 16px; text-align: center; }
 }

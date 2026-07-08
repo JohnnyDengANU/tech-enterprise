@@ -100,11 +100,15 @@ function initCounters() {
     counters.forEach(c => counterObs.observe(c));
 }
 
-/* ===== Contact Form ===== */
+/* ===== Contact Form — 入驻申请邮件通知 ===== */
 const contactForm = document.getElementById('contactForm');
-contactForm.addEventListener('submit', (e) => {
+const submitBtn = contactForm.querySelector('button[type="submit"]');
+const submitBtnHTML = submitBtn.innerHTML;
+
+contactForm.addEventListener('submit', async (e) => {
     e.preventDefault();
 
+    // 收集表单数据
     const data = {
         name: document.getElementById('cname').value.trim(),
         company: document.getElementById('ccompany').value.trim(),
@@ -114,13 +118,81 @@ contactForm.addEventListener('submit', (e) => {
         message: document.getElementById('cmessage').value.trim()
     };
 
+    // 基础验证
     if (!data.name) { showToast('请填写联系人姓名'); return; }
     if (!data.phone) { showToast('请填写联系电话'); return; }
 
-    console.log('Form submitted:', data);
-    showToast('提交成功！我们将在2个工作日内与您联系。', 'success');
-    contactForm.reset();
+    // 检查邮件服务是否已配置
+    if (typeof EmailService !== 'undefined' && !EmailService.isConfigured()) {
+        // 未配置邮件服务 — 降级为本地保存
+        console.warn('[Form] 邮件服务未配置，请编辑 email-config.js 填入 Access Key');
+        showToast('邮件服务尚未配置，请联系管理员设置 email-config.js', 'error');
+        return;
+    }
+
+    // 进入加载状态
+    setSubmitLoading(true, '发送中...');
+
+    try {
+        const result = await EmailService.sendApplication(data, (progress) => {
+            // 进度回调 — 更新按钮文字
+            if (progress.phase === 'retrying') {
+                setSubmitLoading(true, `重试中(${progress.attempt}/${progress.maxAttempts})...`);
+            } else if (progress.phase === 'waiting_retry') {
+                setSubmitLoading(true, `${progress.nextRetryIn}秒后重试...`);
+            }
+        });
+
+        // 发送成功
+        showToast('申请提交成功！我们将在2个工作日内与您联系。', 'success');
+        contactForm.reset();
+
+        // 检查是否有历史积压的待发送申请
+        const pending = EmailService.getPendingCount();
+        if (pending > 0) {
+            showToast(`检测到 ${pending} 条历史申请待补发，正在自动重发...`, '');
+            EmailService.retryPendingApplications().then(r => {
+                if (r.succeeded > 0) {
+                    showToast(`已自动补发 ${r.succeeded} 条历史申请`, 'success');
+                }
+            });
+        }
+
+    } catch (error) {
+        // 发送失败
+        console.error('[Form] 邮件发送失败:', error);
+
+        let msg = '提交失败，请稍后重试';
+        if (error.type === 'RATE_LIMITED') {
+            msg = error.message;
+        } else if (error.type === 'CONFIG_ERROR') {
+            msg = '邮件服务配置错误: ' + error.message;
+        } else if (error.type === 'VALIDATION_ERROR') {
+            msg = error.message;
+        } else if (error.savedLocally) {
+            msg = '网络异常，您的申请已暂存，恢复网络后将自动补发';
+        }
+
+        showToast(msg, 'error');
+    } finally {
+        setSubmitLoading(false);
+    }
 });
+
+/**
+ * 切换提交按钮的加载状态
+ */
+function setSubmitLoading(loading, loadingText) {
+    if (loading) {
+        submitBtn.disabled = true;
+        submitBtn.innerHTML = `<span class="btn-spinner"></span> ${loadingText || '处理中...'}`;
+        submitBtn.classList.add('btn-loading');
+    } else {
+        submitBtn.disabled = false;
+        submitBtn.innerHTML = submitBtnHTML;
+        submitBtn.classList.remove('btn-loading');
+    }
+}
 
 /* ===== Toast ===== */
 function showToast(message, type) {
