@@ -35,7 +35,7 @@ const EMAIL_CONFIG = {
     /* ---- Web3Forms 配置 ---- */
     // 获取地址: https://web3forms.com (输入邮箱即可获取)
     web3forms: {
-        accessKey: 'YOUR_WEB3FORMS_ACCESS_KEY',  // 替换为你的 Access Key
+        accessKey: '25b90727-a893-4a46-9e4c-74d572462fdb',
     },
 
     /* ---- Formspree 配置 ---- */
