@@ -347,7 +347,155 @@ img { max-width: 100%; display: block; }
     opacity: 1;
 }
 
-/* ===== About ===== */
+/* 加载 spinner */
+.about-video-loading {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 14px;
+    background: var(--pri);
+    color: rgba(255,255,255,0.7);
+    font-size: 14px;
+    z-index: 1;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+}
+.about-video-wrapper.video-loading .about-video-loading { opacity: 1; }
+.about-video-wrapper.video-loaded .about-video-loading,
+.about-video-wrapper.video-error .about-video-loading { opacity: 0; }
+
+.video-spinner {
+    width: 40px;
+    height: 40px;
+    border: 3px solid rgba(196,151,59,0.2);
+    border-top-color: var(--gold);
+    border-radius: 50%;
+    animation: video-spin 0.8s linear infinite;
+}
+@keyframes video-spin { to { transform: rotate(360deg); } }
+@media (prefers-reduced-motion: reduce) { .video-spinner { animation: none; } }
+
+/* ===== 视频控制栏 ===== */
+.video-controls {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 3;
+    padding: 8px 12px 6px;
+    background: linear-gradient(to top, rgba(0,0,0,0.65), transparent);
+    opacity: 0;
+    transition: opacity 0.25s ease;
+}
+.about-video-wrapper.video-loaded:hover .video-controls,
+.about-video-wrapper.video-loaded .video-controls,
+.about-video-wrapper.video-loading .video-controls { opacity: 1; }
+.about-video-wrapper.video-loaded .video-controls { opacity: 0; }
+.about-video-wrapper.video-loaded:hover .video-controls { opacity: 1; }
+
+.video-controls-top {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 4px;
+}
+
+.vc-btn {
+    background: none;
+    border: none;
+    color: rgba(255,255,255,0.85);
+    cursor: pointer;
+    padding: 4px;
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: color 0.15s ease, background 0.15s ease;
+    line-height: 0;
+}
+.vc-btn:hover { color: #fff; background: rgba(255,255,255,0.15); }
+.vc-btn:active { background: rgba(255,255,255,0.25); }
+
+.vc-time {
+    font-size: 12px;
+    color: rgba(255,255,255,0.75);
+    font-variant-numeric: tabular-nums;
+    user-select: none;
+    white-space: nowrap;
+}
+
+.vc-spacer { flex: 1; }
+
+/* 音量组 */
+.vc-volume-group {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.vc-volume-slider {
+    width: 0;
+    overflow: hidden;
+    transition: width 0.25s ease;
+}
+.vc-volume-group:hover .vc-volume-slider { width: 70px; }
+
+.vc-volume-track {
+    position: relative;
+    width: 70px;
+    height: 4px;
+    background: rgba(255,255,255,0.25);
+    border-radius: 2px;
+    cursor: pointer;
+}
+
+.vc-volume-fill {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 0%;
+    background: var(--gold);
+    border-radius: 2px;
+    pointer-events: none;
+}
+
+.vc-volume-thumb {
+    position: absolute;
+    top: 50%;
+    left: 0%;
+    width: 10px;
+    height: 10px;
+    background: var(--gold);
+    border: 2px solid #fff;
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+    pointer-events: none;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.4);
+}
+
+/* 控制栏内的进度条（覆盖原样式底部位置） */
+.video-controls .video-progress-bar {
+    position: relative;
+    bottom: auto;
+    left: auto;
+    right: auto;
+    height: 6px;
+    padding: 4px 0;
+    margin-top: 2px;
+}
+
+/* 移动端：音量滑块始终显示 */
+@media (max-width: 768px) {
+    .vc-volume-slider { width: 50px; }
+    .vc-volume-group:hover .vc-volume-slider { width: 50px; }
+    .video-controls { padding: 6px 8px 4px; }
+    .vc-time { font-size: 11px; }
+}
 .about-main { display: grid; grid-template-columns: 1fr 1fr; gap: 60px; align-items: center; margin-top: 50px; }
 
 .about-intro {

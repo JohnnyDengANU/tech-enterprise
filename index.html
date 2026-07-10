@@ -190,22 +190,18 @@
                         -->
                         <video
                             class="about-video"
-                            autoplay
                             muted
                             loop
                             playsinline
-                            poster="assets/about-poster.jpg"
-                            preload="metadata"
+                            preload="none"
+                            data-src="assets/about-intro.mp4"
                         >
-                            <source src="assets/about-intro.mp4" type="video/mp4">
                             您的浏览器不支持 HTML5 视频播放。
                         </video>
-                        <!-- 可拖动的视频进度条 -->
-                        <div class="video-progress-bar">
-                            <div class="video-progress-track">
-                                <div class="video-progress-fill"></div>
-                                <div class="video-progress-thumb"></div>
-                            </div>
+                        <!-- 加载状态 spinner -->
+                        <div class="about-video-loading" aria-hidden="true">
+                            <div class="video-spinner"></div>
+                            <span>视频加载中…</span>
                         </div>
                         <!-- 视频未加载时显示的占位覆盖层 -->
                         <div class="about-video-placeholder" aria-hidden="true">
@@ -213,6 +209,35 @@
                                 <polygon points="5,3 19,12 5,21" fill="rgba(196,151,59,0.15)"/>
                             </svg>
                             <span>研究院宣传视频</span>
+                        </div>
+                        <!-- 视频控制栏 -->
+                        <div class="video-controls">
+                            <div class="video-controls-top">
+                                <button class="vc-btn vc-play-btn" type="button" aria-label="播放/暂停">
+                                    <svg class="vc-icon-play" width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><polygon points="6,3 21,12 6,21"/></svg>
+                                    <svg class="vc-icon-pause" width="20" height="20" viewBox="0 0 24 24" fill="currentColor" style="display:none"><rect x="5" y="3" width="5" height="18" rx="1"/><rect x="14" y="3" width="5" height="18" rx="1"/></svg>
+                                </button>
+                                <span class="vc-time"><span class="vc-current">0:00</span> / <span class="vc-duration">0:00</span></span>
+                                <div class="vc-spacer"></div>
+                                <div class="vc-volume-group">
+                                    <button class="vc-btn vc-mute-btn" type="button" aria-label="静音/取消静音">
+                                        <svg class="vc-icon-muted" width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M3 9v6h4l5 5V4L7 9H3z"/><line x1="16" y1="8" x2="22" y2="14" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><line x1="22" y1="8" x2="16" y2="14" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+                                        <svg class="vc-icon-volume" width="20" height="20" viewBox="0 0 24 24" fill="currentColor" style="display:none"><path d="M3 9v6h4l5 5V4L7 9H3z"/><path d="M16 8a5 5 0 0 1 0 8" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M19 5a9 9 0 0 1 0 14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+                                    </button>
+                                    <div class="vc-volume-slider">
+                                        <div class="vc-volume-track">
+                                            <div class="vc-volume-fill"></div>
+                                            <div class="vc-volume-thumb"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="video-progress-bar">
+                                <div class="video-progress-track">
+                                    <div class="video-progress-fill"></div>
+                                    <div class="video-progress-thumb"></div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>

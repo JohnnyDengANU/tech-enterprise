@@ -73,37 +73,190 @@ document.addEventListener('DOMContentLoaded', () => {
     initAboutVideo();
 });
 
-/* ===== About Video Placeholder + Progress Bar ===== */
+/* ===== About Video — 懒加载 + 播放控制 ===== */
 function initAboutVideo() {
     const video = document.querySelector('.about-video');
     const wrapper = document.querySelector('.about-video-wrapper');
     if (!video || !wrapper) return;
 
-    function showVideo() {
-        wrapper.classList.add('video-loaded');
-    }
-
-    // 视频数据加载完成即可播放
-    video.addEventListener('loadeddata', showVideo);
-    // 兼容某些浏览器 loadeddata 不触发的情况
-    video.addEventListener('play', showVideo);
-
-    // 如果视频加载失败，保持占位层显示
-    video.addEventListener('error', () => {
-        console.warn('视频加载失败，请检查 assets/about-intro.mp4 是否存在');
-    });
-
-    // ===== 进度条交互 =====
+    const placeholder = wrapper.querySelector('.about-video-placeholder');
+    const loadingEl = wrapper.querySelector('.about-video-loading');
+    const playBtn = wrapper.querySelector('.vc-play-btn');
+    const iconPlay = wrapper.querySelector('.vc-icon-play');
+    const iconPause = wrapper.querySelector('.vc-icon-pause');
+    const muteBtn = wrapper.querySelector('.vc-mute-btn');
+    const iconMuted = wrapper.querySelector('.vc-icon-muted');
+    const iconVolume = wrapper.querySelector('.vc-icon-volume');
+    const volSlider = wrapper.querySelector('.vc-volume-slider');
+    const volFill = wrapper.querySelector('.vc-volume-fill');
+    const volThumb = wrapper.querySelector('.vc-volume-thumb');
+    const volTrack = wrapper.querySelector('.vc-volume-track');
     const progressBar = wrapper.querySelector('.video-progress-bar');
     const progressFill = wrapper.querySelector('.video-progress-fill');
     const progressThumb = wrapper.querySelector('.video-progress-thumb');
-    if (!progressBar || !progressFill || !progressThumb) return;
+    const curTimeEl = wrapper.querySelector('.vc-current');
+    const durTimeEl = wrapper.querySelector('.vc-duration');
 
+    /* ---- 1. 懒加载：视口可见时才设 src 并加载 ---- */
+    let loaded = false;
+    const videoObs = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting && !loaded) {
+                loaded = true;
+                wrapper.classList.add('video-loading');
+                const src = video.getAttribute('data-src');
+                if (src) {
+                    const source = document.createElement('source');
+                    source.src = src;
+                    source.type = 'video/mp4';
+                    video.appendChild(source);
+                    video.load();
+                }
+                videoObs.unobserve(video);
+            }
+        });
+    }, { rootMargin: '200px' });
+    videoObs.observe(video);
+
+    /* ---- 2. 视频事件 ---- */
+    function showVideo() {
+        wrapper.classList.remove('video-loading');
+        wrapper.classList.add('video-loaded');
+        if (placeholder) placeholder.style.display = 'none';
+    }
+
+    video.addEventListener('loadeddata', () => {
+        showVideo();
+        video.play().catch(() => {});
+    });
+    video.addEventListener('canplay', showVideo);
+    video.addEventListener('waiting', () => wrapper.classList.add('video-loading'));
+    video.addEventListener('playing', () => wrapper.classList.remove('video-loading'));
+    video.addEventListener('error', () => {
+        wrapper.classList.remove('video-loading');
+        wrapper.classList.add('video-error');
+        console.warn('视频加载失败，请检查 assets/about-intro.mp4');
+    });
+
+    /* ---- 3. 时间格式化 ---- */
+    function fmtTime(sec) {
+        if (!sec || !isFinite(sec)) return '0:00';
+        const m = Math.floor(sec / 60);
+        const s = Math.floor(sec % 60);
+        return m + ':' + (s < 10 ? '0' : '') + s;
+    }
+
+    /* ---- 4. 播放/暂停按钮 ---- */
+    function syncPlayIcon() {
+        if (video.paused) {
+            iconPlay.style.display = '';
+            iconPause.style.display = 'none';
+        } else {
+            iconPlay.style.display = 'none';
+            iconPause.style.display = '';
+        }
+    }
+    video.addEventListener('play', syncPlayIcon);
+    video.addEventListener('pause', syncPlayIcon);
+
+    if (playBtn) {
+        playBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            if (video.paused) video.play().catch(() => {});
+            else video.pause();
+        });
+    }
+
+    // 点击视频区域也切换播放/暂停
+    video.addEventListener('click', () => {
+        if (video.paused) video.play().catch(() => {});
+        else video.pause();
+    });
+
+    /* ---- 5. 静音/音量控制 ---- */
+    let lastVolume = 1;
+
+    function syncMuteIcon() {
+        if (video.muted || video.volume === 0) {
+            iconMuted.style.display = '';
+            iconVolume.style.display = 'none';
+        } else {
+            iconMuted.style.display = 'none';
+            iconVolume.style.display = '';
+        }
+    }
+
+    function updateVolUI() {
+        const pct = (video.muted ? 0 : video.volume) * 100;
+        if (volFill) volFill.style.width = pct + '%';
+        if (volThumb) volThumb.style.left = pct + '%';
+        syncMuteIcon();
+    }
+
+    if (muteBtn) {
+        muteBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            if (video.muted) {
+                video.muted = false;
+                video.volume = lastVolume || 1;
+            } else {
+                lastVolume = video.volume;
+                video.muted = true;
+            }
+            updateVolUI();
+        });
+    }
+
+    // 音量滑块拖拽
+    if (volTrack) {
+        let volDragging = false;
+
+        function volFromEvent(e) {
+            const rect = volTrack.getBoundingClientRect();
+            const x = (e.touches ? e.touches[0].clientX : e.clientX) - rect.left;
+            return Math.max(0, Math.min(1, x / rect.width));
+        }
+
+        function setVol(e) {
+            const v = volFromEvent(e);
+            video.volume = v;
+            video.muted = (v === 0);
+            if (v > 0) lastVolume = v;
+            updateVolUI();
+        }
+
+        volTrack.addEventListener('mousedown', (e) => {
+            volDragging = true;
+            setVol(e);
+            e.preventDefault();
+        });
+        volTrack.addEventListener('touchstart', (e) => {
+            volDragging = true;
+            setVol(e);
+        }, { passive: true });
+
+        document.addEventListener('mousemove', (e) => {
+            if (volDragging) setVol(e);
+        });
+        document.addEventListener('touchmove', (e) => {
+            if (volDragging) setVol(e);
+        }, { passive: true });
+        document.addEventListener('mouseup', () => volDragging = false);
+        document.addEventListener('touchend', () => volDragging = false);
+    }
+
+    video.addEventListener('volumechange', updateVolUI);
+    // 初始状态
+    video.volume = 1;
+    video.muted = true;
+    updateVolUI();
+
+    /* ---- 6. 进度条 ---- */
     let isDragging = false;
 
     function updateProgress(percent) {
-        progressFill.style.width = percent + '%';
-        progressThumb.style.left = percent + '%';
+        if (progressFill) progressFill.style.width = percent + '%';
+        if (progressThumb) progressThumb.style.left = percent + '%';
     }
 
     function getPercentFromEvent(e) {
@@ -112,48 +265,45 @@ function initAboutVideo() {
         return Math.max(0, Math.min(100, (x / rect.width) * 100));
     }
 
-    // timeupdate: 播放中实时更新进度条
     video.addEventListener('timeupdate', () => {
         if (!isDragging && video.duration) {
             updateProgress((video.currentTime / video.duration) * 100);
         }
+        if (curTimeEl) curTimeEl.textContent = fmtTime(video.currentTime);
     });
 
-    // mousedown / touchstart: 开始拖拽
+    video.addEventListener('loadedmetadata', () => {
+        if (durTimeEl) durTimeEl.textContent = fmtTime(video.duration);
+    });
+
     function onDragStart(e) {
         isDragging = true;
         progressBar.classList.add('dragging');
         const percent = getPercentFromEvent(e);
-        if (video.duration) {
-            video.currentTime = (percent / 100) * video.duration;
-        }
+        if (video.duration) video.currentTime = (percent / 100) * video.duration;
         updateProgress(percent);
         e.preventDefault();
     }
-
-    // mousemove / touchmove: 拖拽中
     function onDragMove(e) {
         if (!isDragging) return;
         const percent = getPercentFromEvent(e);
-        if (video.duration) {
-            video.currentTime = (percent / 100) * video.duration;
-        }
+        if (video.duration) video.currentTime = (percent / 100) * video.duration;
         updateProgress(percent);
         e.preventDefault();
     }
-
-    // mouseup / touchend: 结束拖拽
     function onDragEnd() {
         isDragging = false;
         progressBar.classList.remove('dragging');
     }
 
-    progressBar.addEventListener('mousedown', onDragStart);
-    progressBar.addEventListener('touchstart', onDragStart, { passive: false });
-    document.addEventListener('mousemove', onDragMove);
-    document.addEventListener('touchmove', onDragMove, { passive: false });
-    document.addEventListener('mouseup', onDragEnd);
-    document.addEventListener('touchend', onDragEnd);
+    if (progressBar) {
+        progressBar.addEventListener('mousedown', onDragStart);
+        progressBar.addEventListener('touchstart', onDragStart, { passive: false });
+        document.addEventListener('mousemove', onDragMove);
+        document.addEventListener('touchmove', onDragMove, { passive: false });
+        document.addEventListener('mouseup', onDragEnd);
+        document.addEventListener('touchend', onDragEnd);
+    }
 }
 
 /* ===== Counter Animation ===== */
