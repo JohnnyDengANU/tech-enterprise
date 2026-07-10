@@ -62,7 +62,7 @@ const observer = new IntersectionObserver((entries) => {
 
 document.addEventListener('DOMContentLoaded', () => {
     const anims = document.querySelectorAll(
-        '.about-intro, .hl-item, .im-card, .tf-card, .eco-field, .ci-card, .tp-stage'
+        '.about-intro, .hl-item, .im-card, .tf-card, .eco-field, .ci-card, .tp-stage, .rd-card, .ipw-card, .hs-year, .tl-card, .ec-card, .ea-card, .comp-ach-card, .eoc-item, .cm-phase, .about-video-wrapper'
     );
     anims.forEach(el => {
         el.classList.add('fade-in');
@@ -70,7 +70,91 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     initCounters();
+    initAboutVideo();
 });
+
+/* ===== About Video Placeholder + Progress Bar ===== */
+function initAboutVideo() {
+    const video = document.querySelector('.about-video');
+    const wrapper = document.querySelector('.about-video-wrapper');
+    if (!video || !wrapper) return;
+
+    function showVideo() {
+        wrapper.classList.add('video-loaded');
+    }
+
+    // 视频数据加载完成即可播放
+    video.addEventListener('loadeddata', showVideo);
+    // 兼容某些浏览器 loadeddata 不触发的情况
+    video.addEventListener('play', showVideo);
+
+    // 如果视频加载失败，保持占位层显示
+    video.addEventListener('error', () => {
+        console.warn('视频加载失败，请检查 assets/about-intro.mp4 是否存在');
+    });
+
+    // ===== 进度条交互 =====
+    const progressBar = wrapper.querySelector('.video-progress-bar');
+    const progressFill = wrapper.querySelector('.video-progress-fill');
+    const progressThumb = wrapper.querySelector('.video-progress-thumb');
+    if (!progressBar || !progressFill || !progressThumb) return;
+
+    let isDragging = false;
+
+    function updateProgress(percent) {
+        progressFill.style.width = percent + '%';
+        progressThumb.style.left = percent + '%';
+    }
+
+    function getPercentFromEvent(e) {
+        const rect = progressBar.getBoundingClientRect();
+        const x = (e.touches ? e.touches[0].clientX : e.clientX) - rect.left;
+        return Math.max(0, Math.min(100, (x / rect.width) * 100));
+    }
+
+    // timeupdate: 播放中实时更新进度条
+    video.addEventListener('timeupdate', () => {
+        if (!isDragging && video.duration) {
+            updateProgress((video.currentTime / video.duration) * 100);
+        }
+    });
+
+    // mousedown / touchstart: 开始拖拽
+    function onDragStart(e) {
+        isDragging = true;
+        progressBar.classList.add('dragging');
+        const percent = getPercentFromEvent(e);
+        if (video.duration) {
+            video.currentTime = (percent / 100) * video.duration;
+        }
+        updateProgress(percent);
+        e.preventDefault();
+    }
+
+    // mousemove / touchmove: 拖拽中
+    function onDragMove(e) {
+        if (!isDragging) return;
+        const percent = getPercentFromEvent(e);
+        if (video.duration) {
+            video.currentTime = (percent / 100) * video.duration;
+        }
+        updateProgress(percent);
+        e.preventDefault();
+    }
+
+    // mouseup / touchend: 结束拖拽
+    function onDragEnd() {
+        isDragging = false;
+        progressBar.classList.remove('dragging');
+    }
+
+    progressBar.addEventListener('mousedown', onDragStart);
+    progressBar.addEventListener('touchstart', onDragStart, { passive: false });
+    document.addEventListener('mousemove', onDragMove);
+    document.addEventListener('touchmove', onDragMove, { passive: false });
+    document.addEventListener('mouseup', onDragEnd);
+    document.addEventListener('touchend', onDragEnd);
+}
 
 /* ===== Counter Animation ===== */
 function initCounters() {
