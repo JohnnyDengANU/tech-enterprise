@@ -73,7 +73,7 @@ document.addEventListener('DOMContentLoaded', () => {
     initAboutVideo();
 });
 
-/* ===== About Video — 懒加载 + 播放控制 ===== */
+/* ===== About Video — HLS 自适应码率 + 播放控制 ===== */
 function initAboutVideo() {
     const video = document.querySelector('.about-video');
     const wrapper = document.querySelector('.about-video-wrapper');
@@ -97,21 +97,167 @@ function initAboutVideo() {
     const curTimeEl = wrapper.querySelector('.vc-current');
     const durTimeEl = wrapper.querySelector('.vc-duration');
 
-    /* ---- 1. 懒加载：视口可见时才设 src 并加载 ---- */
+    const hlsSrc = video.getAttribute('data-hls-src');
+    const mp4Src = video.getAttribute('data-mp4-src');
+
+    /* ===================================================
+       网络质量检测 — 根据网络状况调整起播码率
+       =================================================== */
+    function getNetworkStartLevel() {
+        const conn = navigator.connection || navigator.mozConnection || navigator.webkitConnection;
+        if (!conn) return 0; // 未知网络 — 保守从 360p 起播
+
+        const effectiveType = conn.effectiveType;
+        const downlink = conn.downlink || 0;
+
+        if (effectiveType === '4g' && downlink > 5) return 2;  // 720p 起播
+        if (effectiveType === '4g' || effectiveType === '3g') return 1;  // 480p 起播
+        return 0;  // 2g/slow-2g — 360p 起播
+    }
+
+    /* ===================================================
+       HLS.js 播放器初始化
+       =================================================== */
+    let hlsInstance = null;
     let loaded = false;
-    const videoObs = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting && !loaded) {
-                loaded = true;
-                wrapper.classList.add('video-loading');
-                const src = video.getAttribute('data-src');
-                if (src) {
-                    const source = document.createElement('source');
-                    source.src = src;
-                    source.type = 'video/mp4';
-                    video.appendChild(source);
-                    video.load();
+
+    function loadVideo() {
+        if (loaded) return;
+        loaded = true;
+        wrapper.classList.add('video-loading');
+
+        // Safari 原生 HLS 支持
+        if (video.canPlayType('application/vnd.apple.mpegurl')) {
+            video.src = hlsSrc;
+            video.load();
+        }
+        // 其他浏览器使用 hls.js (MSE)
+        else if (window.Hls && Hls.isSupported()) {
+            const startLevel = getNetworkStartLevel();
+
+            hlsInstance = new Hls({
+                // ===== 自适应码率 (ABR) 配置 =====
+                startLevel: startLevel,
+                capLevelToPlayerSize: true,
+                abrEwmaDefaultEstimate: 500000,   // 初始带宽估计 500kbps
+                abrEwmaLatencyDefaultEstimate: 2,
+                abrBandWidthFactor: 0.95,
+                abrBandWidthUpFactor: 0.7,
+
+                // ===== 缓冲策略 =====
+                maxBufferLength: 30,               // 最大前方缓冲 30 秒
+                maxMaxBufferLength: 60,            // 绝对上限 60 秒
+                backBufferLength: 10,              // 后方保留 10 秒（减少内存）
+                maxBufferSize: 60 * 1000 * 1000,  // 60MB 内存上限
+                nudgeOffset: 0.1,
+
+                // ===== 分片加载 =====
+                fragLoadingTimeOut: 20000,        // 分片加载超时 20s
+                fragLoadingMaxRetry: 6,           // 最多重试 6 次
+                fragLoadingRetryDelay: 500,       // 重试间隔 500ms
+                fragLoadingMaxRetryTimeout: 64000,
+
+                // ===== manifest 加载 =====
+                manifestLoadingTimeOut: 10000,
+                manifestLoadingMaxRetry: 3,
+                manifestLoadingRetryDelay: 500,
+
+                // ===== 错误恢复 =====
+                enableWorker: true,               // Web Worker 解码（不阻塞主线程）
+                lowLatencyMode: false,            // VOD 不需要低延迟
+                recoverMediaError: true,
+                recoverOnNetworkError: true,
+
+                // ===== XHR 配置 =====
+                xhrSetup: function(xhr) {
+                    xhr.withCredentials = false;
                 }
+            });
+
+            hlsInstance.loadSource(hlsSrc);
+            hlsInstance.attachMedia(video);
+
+            // 监听 HLS 事件
+            hlsInstance.on(Hls.Events.MANIFEST_PARSED, function() {
+                console.log('[HLS] manifest 解析完成，共', hlsInstance.levels.length, '个码率等级');
+            });
+
+            hlsInstance.on(Hls.Events.LEVEL_SWITCHED, function(event, data) {
+                const level = hlsInstance.levels[data.level];
+                const height = level ? level.height : '?';
+                const bitrate = level ? Math.round(level.bitrate / 1000) : '?';
+                console.log('[HLS] 码率切换至:', height + 'p', bitrate + 'kbps');
+
+                // 更新占位层显示当前质量
+                if (placeholder) {
+                    var qualityLabel = placeholder.querySelector('.quality-badge');
+                    if (!qualityLabel) {
+                        qualityLabel = document.createElement('span');
+                        qualityLabel.className = 'quality-badge';
+                        qualityLabel.style.cssText = 'position:absolute;top:8px;right:8px;background:rgba(196,151,59,0.9);color:#fff;padding:2px 8px;border-radius:4px;font-size:11px;font-weight:600;z-index:4;pointer-events:none;';
+                        wrapper.appendChild(qualityLabel);
+                    }
+                    qualityLabel.textContent = height + 'p';
+                }
+            });
+
+            hlsInstance.on(Hls.Events.ERROR, function(event, data) {
+                console.warn('[HLS] 错误:', data.type, data.details);
+
+                if (data.fatal) {
+                    switch (data.type) {
+                        case Hls.ErrorTypes.NETWORK_ERROR:
+                            console.log('[HLS] 网络错误，尝试恢复...');
+                            hlsInstance.startLoad();
+                            break;
+                        case Hls.ErrorTypes.MEDIA_ERROR:
+                            console.log('[HLS] 媒体错误，尝试恢复...');
+                            hlsInstance.recoverMediaError();
+                            break;
+                        default:
+                            console.error('[HLS] 致命错误，降级到 MP4');
+                            destroyHls();
+                            loadMp4Fallback();
+                            break;
+                    }
+                }
+            });
+        }
+        // 完全不支持 HLS — 降级到 H.264 MP4
+        else {
+            loadMp4Fallback();
+        }
+    }
+
+    function destroyHls() {
+        if (hlsInstance) {
+            hlsInstance.destroy();
+            hlsInstance = null;
+        }
+    }
+
+    function loadMp4Fallback() {
+        if (mp4Src) {
+            var source = document.createElement('source');
+            source.src = mp4Src;
+            source.type = 'video/mp4';
+            video.appendChild(source);
+            video.load();
+        } else {
+            // 最后降级 — 尝试原始 MP4
+            var source = document.createElement('source');
+            source.src = 'assets/about-intro.mp4';
+            source.type = 'video/mp4';
+            video.appendChild(source);
+            video.load();
+        }
+    }
+
+    /* ---- 1. 懒加载：视口可见时才加载视频 ---- */
+    const videoObs = new IntersectionObserver(function(entries) {
+        entries.forEach(function(entry) {
+            if (entry.isIntersecting && !loaded) {
+                loadVideo();
                 videoObs.unobserve(video);
             }
         });
@@ -125,24 +271,25 @@ function initAboutVideo() {
         if (placeholder) placeholder.style.display = 'none';
     }
 
-    video.addEventListener('loadeddata', () => {
+    video.addEventListener('loadeddata', function() {
         showVideo();
-        video.play().catch(() => {});
+        video.play().catch(function() {});
     });
     video.addEventListener('canplay', showVideo);
-    video.addEventListener('waiting', () => wrapper.classList.add('video-loading'));
-    video.addEventListener('playing', () => wrapper.classList.remove('video-loading'));
-    video.addEventListener('error', () => {
+    video.addEventListener('waiting', function() { wrapper.classList.add('video-loading'); });
+    video.addEventListener('playing', function() { wrapper.classList.remove('video-loading'); });
+    video.addEventListener('stalled', function() { wrapper.classList.add('video-loading'); });
+    video.addEventListener('error', function() {
         wrapper.classList.remove('video-loading');
         wrapper.classList.add('video-error');
-        console.warn('视频加载失败，请检查 assets/about-intro.mp4');
+        console.warn('视频加载失败');
     });
 
     /* ---- 3. 时间格式化 ---- */
     function fmtTime(sec) {
         if (!sec || !isFinite(sec)) return '0:00';
-        const m = Math.floor(sec / 60);
-        const s = Math.floor(sec % 60);
+        var m = Math.floor(sec / 60);
+        var s = Math.floor(sec % 60);
         return m + ':' + (s < 10 ? '0' : '') + s;
     }
 
@@ -160,21 +307,20 @@ function initAboutVideo() {
     video.addEventListener('pause', syncPlayIcon);
 
     if (playBtn) {
-        playBtn.addEventListener('click', (e) => {
+        playBtn.addEventListener('click', function(e) {
             e.stopPropagation();
-            if (video.paused) video.play().catch(() => {});
+            if (video.paused) video.play().catch(function() {});
             else video.pause();
         });
     }
 
-    // 点击视频区域也切换播放/暂停
-    video.addEventListener('click', () => {
-        if (video.paused) video.play().catch(() => {});
+    video.addEventListener('click', function() {
+        if (video.paused) video.play().catch(function() {});
         else video.pause();
     });
 
     /* ---- 5. 静音/音量控制 ---- */
-    let lastVolume = 1;
+    var lastVolume = 1;
 
     function syncMuteIcon() {
         if (video.muted || video.volume === 0) {
@@ -187,14 +333,14 @@ function initAboutVideo() {
     }
 
     function updateVolUI() {
-        const pct = (video.muted ? 0 : video.volume) * 100;
+        var pct = (video.muted ? 0 : video.volume) * 100;
         if (volFill) volFill.style.width = pct + '%';
         if (volThumb) volThumb.style.left = pct + '%';
         syncMuteIcon();
     }
 
     if (muteBtn) {
-        muteBtn.addEventListener('click', (e) => {
+        muteBtn.addEventListener('click', function(e) {
             e.stopPropagation();
             if (video.muted) {
                 video.muted = false;
@@ -207,52 +353,50 @@ function initAboutVideo() {
         });
     }
 
-    // 音量滑块拖拽
     if (volTrack) {
-        let volDragging = false;
+        var volDragging = false;
 
         function volFromEvent(e) {
-            const rect = volTrack.getBoundingClientRect();
-            const x = (e.touches ? e.touches[0].clientX : e.clientX) - rect.left;
+            var rect = volTrack.getBoundingClientRect();
+            var x = (e.touches ? e.touches[0].clientX : e.clientX) - rect.left;
             return Math.max(0, Math.min(1, x / rect.width));
         }
 
         function setVol(e) {
-            const v = volFromEvent(e);
+            var v = volFromEvent(e);
             video.volume = v;
             video.muted = (v === 0);
             if (v > 0) lastVolume = v;
             updateVolUI();
         }
 
-        volTrack.addEventListener('mousedown', (e) => {
+        volTrack.addEventListener('mousedown', function(e) {
             volDragging = true;
             setVol(e);
             e.preventDefault();
         });
-        volTrack.addEventListener('touchstart', (e) => {
+        volTrack.addEventListener('touchstart', function(e) {
             volDragging = true;
             setVol(e);
         }, { passive: true });
 
-        document.addEventListener('mousemove', (e) => {
+        document.addEventListener('mousemove', function(e) {
             if (volDragging) setVol(e);
         });
-        document.addEventListener('touchmove', (e) => {
+        document.addEventListener('touchmove', function(e) {
             if (volDragging) setVol(e);
         }, { passive: true });
-        document.addEventListener('mouseup', () => volDragging = false);
-        document.addEventListener('touchend', () => volDragging = false);
+        document.addEventListener('mouseup', function() { volDragging = false; });
+        document.addEventListener('touchend', function() { volDragging = false; });
     }
 
     video.addEventListener('volumechange', updateVolUI);
-    // 初始状态
     video.volume = 1;
     video.muted = true;
     updateVolUI();
 
     /* ---- 6. 进度条 ---- */
-    let isDragging = false;
+    var isDragging = false;
 
     function updateProgress(percent) {
         if (progressFill) progressFill.style.width = percent + '%';
@@ -260,33 +404,33 @@ function initAboutVideo() {
     }
 
     function getPercentFromEvent(e) {
-        const rect = progressBar.getBoundingClientRect();
-        const x = (e.touches ? e.touches[0].clientX : e.clientX) - rect.left;
+        var rect = progressBar.getBoundingClientRect();
+        var x = (e.touches ? e.touches[0].clientX : e.clientX) - rect.left;
         return Math.max(0, Math.min(100, (x / rect.width) * 100));
     }
 
-    video.addEventListener('timeupdate', () => {
+    video.addEventListener('timeupdate', function() {
         if (!isDragging && video.duration) {
             updateProgress((video.currentTime / video.duration) * 100);
         }
         if (curTimeEl) curTimeEl.textContent = fmtTime(video.currentTime);
     });
 
-    video.addEventListener('loadedmetadata', () => {
+    video.addEventListener('loadedmetadata', function() {
         if (durTimeEl) durTimeEl.textContent = fmtTime(video.duration);
     });
 
     function onDragStart(e) {
         isDragging = true;
         progressBar.classList.add('dragging');
-        const percent = getPercentFromEvent(e);
+        var percent = getPercentFromEvent(e);
         if (video.duration) video.currentTime = (percent / 100) * video.duration;
         updateProgress(percent);
         e.preventDefault();
     }
     function onDragMove(e) {
         if (!isDragging) return;
-        const percent = getPercentFromEvent(e);
+        var percent = getPercentFromEvent(e);
         if (video.duration) video.currentTime = (percent / 100) * video.duration;
         updateProgress(percent);
         e.preventDefault();
@@ -304,6 +448,13 @@ function initAboutVideo() {
         document.addEventListener('mouseup', onDragEnd);
         document.addEventListener('touchend', onDragEnd);
     }
+
+    /* ---- 7. 页面不可见时暂停视频（节省资源） ---- */
+    document.addEventListener('visibilitychange', function() {
+        if (document.hidden && !video.paused) {
+            video.pause();
+        }
+    });
 }
 
 /* ===== Counter Animation ===== */
