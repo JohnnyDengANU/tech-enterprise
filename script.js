@@ -125,9 +125,11 @@ function initAboutVideo() {
         if (loaded) return;
         loaded = true;
         wrapper.classList.add('video-loading');
+        console.log('[Video] 开始加载, HLS源:', hlsSrc, 'MP4降级:', mp4Src);
 
         // Safari 原生 HLS 支持
         if (video.canPlayType('application/vnd.apple.mpegurl')) {
+            console.log('[Video] 使用 Safari 原生 HLS');
             video.src = hlsSrc;
             video.load();
         }
@@ -225,6 +227,7 @@ function initAboutVideo() {
         }
         // 完全不支持 HLS — 降级到 H.264 MP4
         else {
+            console.warn('[Video] HLS.js 未加载或浏览器不支持 MSE，降级到 MP4');
             loadMp4Fallback();
         }
     }
@@ -237,6 +240,9 @@ function initAboutVideo() {
     }
 
     function loadMp4Fallback() {
+        console.log('[Video] 降级到 MP4 播放:', mp4Src || 'assets/about-intro.mp4');
+        // 确保 video 不再使用 preload=none
+        video.preload = 'auto';
         if (mp4Src) {
             var source = document.createElement('source');
             source.src = mp4Src;

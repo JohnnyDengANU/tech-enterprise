@@ -3,8 +3,8 @@
  * 缓存 HLS TS 分片以加速重复访问
  */
 
-const CACHE_VERSION = 'video-hls-v1';
-const HLS_CACHE = 'hls-segments-v1';
+const CACHE_VERSION = 'video-hls-v2';
+const HLS_CACHE = 'hls-segments-v2';
 
 // 安装时激活
 self.addEventListener('install', (event) => {
