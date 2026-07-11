@@ -1,12 +1,13 @@
 /**
- * Service Worker — 视频分片缓存
- * 缓存 HLS TS 分片以加速重复访问
+ * Service Worker — 视频缓存优化 v3
+ * 简化缓存策略：m3u8 网络优先，TS 分片依赖浏览器 HTTP 缓存
+ * 支持 jsDelivr CDN 跨域 URL
  */
 
-const CACHE_VERSION = 'video-hls-v2';
-const HLS_CACHE = 'hls-segments-v2';
+const CACHE_VERSION = 'video-hls-v3';
+const HLS_CACHE = 'hls-segments-v3';
+const MAX_TS_CACHE = 60; // 最多缓存 60 个 TS 分片（约 6 分钟视频）
 
-// 安装时激活
 self.addEventListener('install', (event) => {
     self.skipWaiting();
 });
@@ -19,23 +20,30 @@ self.addEventListener('activate', (event) => {
                     .filter(key => key !== CACHE_VERSION && key !== HLS_CACHE)
                     .map(key => caches.delete(key))
             );
-        })
+        }).then(() => self.clients.claim())
     );
-    self.clients.claim();
 });
 
 self.addEventListener('fetch', (event) => {
     const url = new URL(event.request.url);
 
-    // TS 分片 — 缓存优先（永久缓存已下载的分片）
+    // TS 分片 — 缓存优先，但限制总缓存数量
     if (url.pathname.endsWith('.ts')) {
         event.respondWith(
             caches.open(HLS_CACHE).then(cache =>
                 cache.match(event.request).then(cached => {
                     if (cached) return cached;
                     return fetch(event.request).then(response => {
-                        // 仅缓存成功响应
                         if (response.status === 200) {
+                            // 缓存前检查数量限制
+                            cache.keys().then(keys => {
+                                if (keys.length >= MAX_TS_CACHE) {
+                                    // 删除最早的分片
+                                    keys.slice(0, keys.length - MAX_TS_CACHE + 1).forEach(key => {
+                                        cache.delete(key);
+                                    });
+                                }
+                            });
                             cache.put(event.request, response.clone());
                         }
                         return response;
@@ -63,7 +71,7 @@ self.addEventListener('fetch', (event) => {
     }
 
     // poster.jpg — 缓存优先
-    if (url.pathname.endsWith('poster.jpg')) {
+    if (url.pathname.endsWith('poster.jpg') || url.pathname.endsWith('poster_backup.jpg')) {
         event.respondWith(
             caches.match(event.request).then(cached =>
                 cached || fetch(event.request).then(response => {

@@ -101,18 +101,23 @@ function initAboutVideo() {
     const mp4Src = video.getAttribute('data-mp4-src');
 
     /* ===================================================
-       网络质量检测 — 根据网络状况调整起播码率
+       网络质量检测 — 始终从最低码率起播，快速首帧
        =================================================== */
     function getNetworkStartLevel() {
-        const conn = navigator.connection || navigator.mozConnection || navigator.webkitConnection;
-        if (!conn) return 0; // 未知网络 — 保守从 360p 起播
+        return 0; // 强制 360p 起播 — 首帧优先于画质
+    }
 
-        const effectiveType = conn.effectiveType;
-        const downlink = conn.downlink || 0;
+    /* ===================================================
+       CDN 源地址 — jsDelivr 中国节点加速
+       =================================================== */
+    const CDN_BASE = 'https://cdn.jsdelivr.net/gh/JohnnyDengANU/tech-enterprise@main';
+    const ORIGIN_BASE = ''; // GitHub Pages 原始源（降级用）
 
-        if (effectiveType === '4g' && downlink > 5) return 2;  // 720p 起播
-        if (effectiveType === '4g' || effectiveType === '3g') return 1;  // 480p 起播
-        return 0;  // 2g/slow-2g — 360p 起播
+    function resolveSrc(attrValue) {
+        // 如果 data-src 已是绝对 URL，直接使用；否则拼接 CDN
+        if (!attrValue) return '';
+        if (attrValue.startsWith('http')) return attrValue;
+        return CDN_BASE + '/' + attrValue;
     }
 
     /* ===================================================
@@ -120,53 +125,59 @@ function initAboutVideo() {
        =================================================== */
     let hlsInstance = null;
     let loaded = false;
+    let cdnFailed = false;
 
     function loadVideo() {
         if (loaded) return;
         loaded = true;
         wrapper.classList.add('video-loading');
-        console.log('[Video] 开始加载, HLS源:', hlsSrc, 'MP4降级:', mp4Src);
+
+        // 解析源地址 — 优先 CDN，CDN 失败后降级到原始源
+        const cdnHlsSrc = cdnFailed ? hlsSrc : resolveSrc(hlsSrc);
+        const cdnMp4Src = cdnFailed ? mp4Src : resolveSrc(mp4Src);
+        console.log('[Video] HLS源:', cdnHlsSrc, 'MP4降级:', cdnMp4Src);
 
         // Safari 原生 HLS 支持
         if (video.canPlayType('application/vnd.apple.mpegurl')) {
             console.log('[Video] 使用 Safari 原生 HLS');
-            video.src = hlsSrc;
+            video.src = cdnHlsSrc;
             video.load();
         }
         // 其他浏览器使用 hls.js (MSE)
         else if (window.Hls && Hls.isSupported()) {
-            const startLevel = getNetworkStartLevel();
-
             hlsInstance = new Hls({
                 // ===== 自适应码率 (ABR) 配置 =====
-                startLevel: startLevel,
+                startLevel: 0,                        // 强制 360p 起播
                 capLevelToPlayerSize: true,
-                abrEwmaDefaultEstimate: 500000,   // 初始带宽估计 500kbps
-                abrEwmaLatencyDefaultEstimate: 2,
-                abrBandWidthFactor: 0.95,
-                abrBandWidthUpFactor: 0.7,
+                abrEwmaDefaultEstimate: 800000,       // 初始带宽估计 800kbps（更积极）
+                abrEwmaLatencyDefaultEstimate: 1,
+                abrBandWidthFactor: 0.8,              // 降级阈值更敏感
+                abrBandWidthUpFactor: 0.5,            // 升级更保守（避免频繁切换）
 
                 // ===== 缓冲策略 =====
-                maxBufferLength: 30,               // 最大前方缓冲 30 秒
-                maxMaxBufferLength: 60,            // 绝对上限 60 秒
-                backBufferLength: 10,              // 后方保留 10 秒（减少内存）
-                maxBufferSize: 60 * 1000 * 1000,  // 60MB 内存上限
-                nudgeOffset: 0.1,
+                maxBufferLength: 20,                  // 前方缓冲 20 秒（减少内存）
+                maxMaxBufferLength: 40,               // 绝对上限 40 秒
+                backBufferLength: 5,                  // 后方保留 5 秒
+                maxBufferSize: 30 * 1000 * 1000,      // 30MB 内存上限
+                nudgeOffset: 0.2,                     // 更积极的 nudge
 
                 // ===== 分片加载 =====
-                fragLoadingTimeOut: 20000,        // 分片加载超时 20s
-                fragLoadingMaxRetry: 6,           // 最多重试 6 次
-                fragLoadingRetryDelay: 500,       // 重试间隔 500ms
+                fragLoadingTimeOut: 30000,            // 超时 30s（适应跨海网络）
+                fragLoadingMaxRetry: 10,              // 最多重试 10 次
+                fragLoadingRetryDelay: 1000,          // 重试间隔 1s
                 fragLoadingMaxRetryTimeout: 64000,
 
-                // ===== manifest 加载 =====
-                manifestLoadingTimeOut: 10000,
-                manifestLoadingMaxRetry: 3,
-                manifestLoadingRetryDelay: 500,
+                // ===== manifest/level 加载 =====
+                manifestLoadingTimeOut: 15000,
+                manifestLoadingMaxRetry: 5,
+                manifestLoadingRetryDelay: 800,
+                levelLoadingTimeOut: 30000,
+                levelLoadingMaxRetry: 10,
+                levelLoadingRetryDelay: 1000,
 
                 // ===== 错误恢复 =====
-                enableWorker: true,               // Web Worker 解码（不阻塞主线程）
-                lowLatencyMode: false,            // VOD 不需要低延迟
+                enableWorker: true,
+                lowLatencyMode: false,
                 recoverMediaError: true,
                 recoverOnNetworkError: true,
 
@@ -176,12 +187,14 @@ function initAboutVideo() {
                 }
             });
 
-            hlsInstance.loadSource(hlsSrc);
+            hlsInstance.loadSource(cdnHlsSrc);
             hlsInstance.attachMedia(video);
 
             // 监听 HLS 事件
             hlsInstance.on(Hls.Events.MANIFEST_PARSED, function() {
                 console.log('[HLS] manifest 解析完成，共', hlsInstance.levels.length, '个码率等级');
+                // 预加载：manifest 解析后立即请求第一个分片
+                hlsInstance.startLoad(0);
             });
 
             hlsInstance.on(Hls.Events.LEVEL_SWITCHED, function(event, data) {
@@ -209,6 +222,11 @@ function initAboutVideo() {
                 if (data.fatal) {
                     switch (data.type) {
                         case Hls.ErrorTypes.NETWORK_ERROR:
+                            // 网络错误 — 先尝试降低码率
+                            if (hlsInstance.currentLevel > 0) {
+                                console.log('[HLS] 网络错误，降低码率至 360p');
+                                hlsInstance.currentLevel = 0;
+                            }
                             console.log('[HLS] 网络错误，尝试恢复...');
                             hlsInstance.startLoad();
                             break;
@@ -217,9 +235,18 @@ function initAboutVideo() {
                             hlsInstance.recoverMediaError();
                             break;
                         default:
-                            console.error('[HLS] 致命错误，降级到 MP4');
-                            destroyHls();
-                            loadMp4Fallback();
+                            // 致命错误 — 如果还在用 CDN，尝试切换到原始源
+                            if (!cdnFailed) {
+                                console.warn('[HLS] CDN 致命错误，切换到原始源重试');
+                                cdnFailed = true;
+                                destroyHls();
+                                loaded = false;
+                                loadVideo();
+                            } else {
+                                console.error('[HLS] 致命错误，降级到 MP4');
+                                destroyHls();
+                                loadMp4Fallback();
+                            }
                             break;
                     }
                 }
@@ -240,26 +267,17 @@ function initAboutVideo() {
     }
 
     function loadMp4Fallback() {
-        console.log('[Video] 降级到 MP4 播放:', mp4Src || 'assets/about-intro.mp4');
-        // 确保 video 不再使用 preload=none
+        const fallbackMp4 = cdnFailed ? (mp4Src || 'assets/about-intro.mp4') : resolveSrc(mp4Src);
+        console.log('[Video] 降级到 MP4 播放:', fallbackMp4);
         video.preload = 'auto';
-        if (mp4Src) {
-            var source = document.createElement('source');
-            source.src = mp4Src;
-            source.type = 'video/mp4';
-            video.appendChild(source);
-            video.load();
-        } else {
-            // 最后降级 — 尝试原始 MP4
-            var source = document.createElement('source');
-            source.src = 'assets/about-intro.mp4';
-            source.type = 'video/mp4';
-            video.appendChild(source);
-            video.load();
-        }
+        var source = document.createElement('source');
+        source.src = fallbackMp4;
+        source.type = 'video/mp4';
+        video.appendChild(source);
+        video.load();
     }
 
-    /* ---- 1. 懒加载：视口可见时才加载视频 ---- */
+    /* ---- 1. 懒加载：视口可见时才加载视频（提前400px预加载） ---- */
     const videoObs = new IntersectionObserver(function(entries) {
         entries.forEach(function(entry) {
             if (entry.isIntersecting && !loaded) {
@@ -267,7 +285,7 @@ function initAboutVideo() {
                 videoObs.unobserve(video);
             }
         });
-    }, { rootMargin: '200px' });
+    }, { rootMargin: '400px' });
     videoObs.observe(video);
 
     /* ---- 2. 视频事件 ---- */
