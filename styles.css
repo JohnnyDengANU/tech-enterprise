@@ -1118,3 +1118,66 @@ img { max-width: 100%; display: block; }
     .contact-form { padding: 20px; }
     .toast { left: 16px; right: 16px; bottom: 16px; text-align: center; }
 }
+
+/* ===== Hero 首页右侧：上中下三段式转化管线（原科技成果版块内容迁移） ===== */
+.hc-pipeline { display: flex; flex-direction: column; }
+.hc-seg {
+    position: relative;
+    display: flex; align-items: center; gap: 14px;
+    padding: 14px 16px; margin-bottom: 10px;
+    background: var(--bg-alt);
+    border: 1px solid var(--border-light);
+    border-radius: var(--radius);
+    transition: all var(--transition);
+}
+.hc-seg:last-child { margin-bottom: 0; }
+.hc-seg:hover { transform: translateX(4px); box-shadow: var(--shadow-md); border-color: var(--pri-light); }
+.hc-seg-num {
+    position: absolute; top: -9px; left: -9px;
+    width: 22px; height: 22px; border-radius: 50%;
+    background: var(--pri); color: #fff;
+    font-size: 11px; font-weight: 700; line-height: 22px; text-align: center;
+    box-shadow: var(--shadow);
+}
+.hc-seg-icon {
+    flex: 0 0 auto; width: 46px; height: 46px; border-radius: 12px;
+    display: flex; align-items: center; justify-content: center;
+}
+.hc-seg-icon-1 { background: var(--pri-bg); color: var(--pri); }
+.hc-seg-icon-2 { background: #e8f0fe; color: var(--pri-lighter); }
+.hc-seg-icon-3 { background: var(--gold-bg); color: var(--gold); }
+.hc-seg-text { flex: 1; min-width: 0; }
+.hc-seg-text h4 { font-size: 15px; font-weight: 700; color: var(--dark); margin-bottom: 3px; }
+.hc-seg-text p { font-size: 12.5px; color: var(--text-3); line-height: 1.55; }
+.hc-seg-arrow {
+    height: 16px; display: flex; align-items: center; justify-content: center;
+}
+.hc-seg-arrow::after {
+    content: ""; width: 1px; height: 100%;
+    background: repeating-linear-gradient(180deg, var(--border-light) 0 4px, transparent 4px 8px);
+}
+
+/* ===== 关于我们版块：发展理念标语（原愿景版块 blockquote 迁移） ===== */
+.about-slogan {
+    margin-top: 50px; padding: 38px 40px;
+    background: linear-gradient(135deg, var(--pri) 0%, var(--pri-light) 100%);
+    border-radius: var(--radius-lg);
+    text-align: center; position: relative; overflow: hidden;
+}
+.about-slogan-mark {
+    font-size: 60px; line-height: 0.6; color: rgba(255,255,255,0.18);
+    font-family: Georgia, "Times New Roman", serif; margin-bottom: 14px;
+}
+.about-slogan-text {
+    font-size: 19px; font-weight: 400; line-height: 1.9;
+    color: rgba(255,255,255,0.92); font-style: italic;
+    border: none; margin: 0 0 16px;
+}
+.about-slogan-text .text-accent { color: var(--gold); font-style: normal; font-weight: 700; }
+.about-slogan-source {
+    font-size: 14px; color: rgba(255,255,255,0.55); letter-spacing: 1px; margin: 0;
+}
+@media (max-width: 768px) {
+    .about-slogan { padding: 28px 20px; }
+    .about-slogan-text { font-size: 16px; }
+}
